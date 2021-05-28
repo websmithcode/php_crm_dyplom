@@ -1,0 +1,15 @@
+@import 'variables.css';
+@import 'independed_classes.css';
+html, body {
+    height: 100%;
+}
+body{
+    background-color: #f5f5f5;
+}
+#sidebar{
+    width: var(--sidebar-width);
+}
+#content {
+    padding: 40px 0 40px var(--sidebar-width);
+    height: max-content;
+}

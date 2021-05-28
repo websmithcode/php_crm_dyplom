@@ -6,7 +6,7 @@ class OrdersModel extends Model
     {
         $sql = "SELECT 
                         o.OrderID as 'Номер заказа', 
-                        o.OrderDate as 'Дата заказа',
+                        DATE_FORMAT(o.OrderDate, '%d.%m.%Y') as 'Дата заказа',
                         s.StateName as 'Статус',
                         p.PartnerName as 'Партнер',
                         CONCAT(c.ClientSurName, ' ', c.ClientName, ' ', c.ClientMiddleName) as 'Клиент',
@@ -24,9 +24,7 @@ class OrdersModel extends Model
             $stmt = $this->db->prepare($sql);
         }
         $stmt->execute();
-        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        return $res;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 

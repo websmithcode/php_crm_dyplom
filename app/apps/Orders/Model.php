@@ -2,7 +2,7 @@
 
 use PDO;
 
-class Model extends \core\Model
+class Model extends \Core\Model
 {
     public function getOrders($filters = null)
     {
@@ -18,30 +18,59 @@ class Model extends \core\Model
                     JOIN partners as p on p.PartnerID = o.PartnerID 
                     JOIN states as s on s.StateID = o.StateID
                     JOIN clients as c on c.ClientID = o.ClientID";
+        $_where = false;
         if (!empty($filters)){
             if (!empty($filters['fromDatetime'])){
+                $sql .= $_where ? " AND" : " WHERE";
                 $strFromDateTime = $filters['fromDatetime']->format('Y-m-d H:i:s');
-                $sql .= sprintf(" WHERE o.OrderDate > '%s'", $strFromDateTime);
+                $sql .= sprintf(" o.OrderDate > '%s'", $strFromDateTime);
+                $_where = true;
             }
             if (!empty($filters['toDatetime'])){
+                $sql .= $_where ? " AND" : " WHERE";
                 $strToDateTime = $filters['toDatetime']->format('Y-m-d H:i:s');
-                $sql .= sprintf(" WHERE o.OrderDate < '%s'", $strToDateTime);
+                $sql .= sprintf(" o.OrderDate < '%s'", $strToDateTime);
+                $_where = true;
+            }
+            if (!empty($filters['PartnerID'])){
+                $sql .= $_where ? " AND" : " WHERE";
+                $sql .= sprintf(" p.PartnerID = '%s'", $filters['PartnerID']);
+                $_where = true;
+            }
+            if (!empty($filters['PartnerName'])){
+                $sql .= $_where ? " AND" : " WHERE";
+                $sql .= sprintf(" p.PartnerName = '%s'", $filters['PartnerName']);
+                $_where = true;
+            }
+            if (!empty($filters['PartnerEmail'])){
+                $sql .= $_where ? " AND" : " WHERE";
+                $sql .= sprintf(" p.PartnerEmail = '%s'", $filters['PartnerEmail']);
+                $_where = true;
+            }
+            if (!empty($filters['PartnerRequisites'])){
+                $sql .= $_where ? " AND" : " WHERE";
+                $sql .= sprintf(" p.PartnerRequisites = '%s'", $filters['PartnerRequisites']);
+                $_where = true;
             }
         }
+
         if ($_SESSION['user']['LoginRoleID'] == 2) {
-            $sql .= " WHERE o.PartnerID = :partnerID";
+            $sql .= $_where ? " AND" : " WHERE";
+            $sql .= " o.PartnerID = :partnerID";
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(":partnerID", $_SESSION['user']['PartnerID']);
         } else {
             $stmt = $this->db->prepare($sql);
         }
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getPartnersArray(){
+    public function getPartners(){
         $sql = "SELECT * FROM partners";
         $stmt = $this->db->prepare($sql);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

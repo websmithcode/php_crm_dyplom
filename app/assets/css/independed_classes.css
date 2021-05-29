@@ -7,3 +7,6 @@
 .h-max-content{
     height: max-content;
 }
+.hover-pointer:hover{
+    cursor: pointer;
+}

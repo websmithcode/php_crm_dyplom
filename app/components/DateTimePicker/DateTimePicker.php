@@ -3,7 +3,7 @@
 </style>
 <?php
 
-class DateTimePickerComponent extends Component
+class DateTimePicker extends Component
 {
 
     public function __construct($dateName, $timeName, $classes = '')

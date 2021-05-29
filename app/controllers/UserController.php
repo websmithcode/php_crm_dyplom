@@ -18,7 +18,10 @@ class UserController extends Controller{
         }
 
         if (!empty($_POST)) {
-            $loggedInUser = $this->model->checkUser();
+            $login = $_POST['login'];
+            $password = md5($_POST['password']);
+
+            $loggedInUser = $this->model->checkUser($login, $password);
             if (!$loggedInUser) {
                 $this->pageData['error'] = "Не правильный логин или пароль";
             } else {

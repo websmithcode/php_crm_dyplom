@@ -3,11 +3,8 @@
 class UserModel extends Model
 {
 
-    public function checkUser()
+    public function checkUser($login, $password)
     {
-        $login = $_POST['login'];
-        $password = md5($_POST['password']);
-
         $sql = "SELECT `LoginID`, `LoginName`, `LoginRoleID`, `PartnerID` FROM logins WHERE LoginName = :login AND LoginPassword = :password";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(":login", $login, PDO::PARAM_STR);

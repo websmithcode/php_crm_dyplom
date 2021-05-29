@@ -5,9 +5,10 @@
 class DateTimePickerComponent extends Component
 {
 
-    public function __construct($dateName, $timeName){
+    public function __construct($dateName, $timeName, $classes=''){
         $this->componentData['dateName'] = $dateName;
         $this->componentData['timeName'] = $timeName;
+        $this->componentData['classes'] = $classes;
 
         parent::__construct();
     }

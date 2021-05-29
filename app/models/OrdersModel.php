@@ -2,11 +2,11 @@
 
 class OrdersModel extends Model
 {
-    public function getOrders()
+    public function getOrders($filters = null)
     {
         $sql = "SELECT 
                         o.OrderID as 'Номер заказа', 
-                        DATE_FORMAT(o.OrderDate, '%d.%m.%Y') as 'Дата заказа',
+                        DATE_FORMAT(o.OrderDate, '%d.%m.%Y в %H:%i:%s') as 'Дата заказа',
                         s.StateName as 'Статус',
                         p.PartnerName as 'Партнер',
                         CONCAT(c.ClientSurName, ' ', c.ClientName, ' ', c.ClientMiddleName) as 'Клиент',
@@ -16,8 +16,18 @@ class OrdersModel extends Model
                     JOIN partners as p on p.PartnerID = o.PartnerID 
                     JOIN states as s on s.StateID = o.StateID
                     JOIN clients as c on c.ClientID = o.ClientID";
+        if (!empty($filters)){
+            if (!empty($filters['fromDatetime'])){
+                $strFromDateTime = $filters['fromDatetime']->format('Y-m-d H:i:s');
+                $sql .= sprintf(" WHERE o.OrderDate > '%s'", $strFromDateTime);
+            }
+            if (!empty($filters['toDatetime'])){
+                $strToDateTime = $filters['toDatetime']->format('Y-m-d H:i:s');
+                $sql .= sprintf(" WHERE o.OrderDate < '%s'", $strToDateTime);
+            }
+        }
         if ($_SESSION['user']['LoginRoleID'] == 2) {
-            $sql .= "WHERE o.PartnerID = :partnerID";
+            $sql .= " WHERE o.PartnerID = :partnerID";
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(":partnerID", $_SESSION['user']['PartnerID']);
         } else {

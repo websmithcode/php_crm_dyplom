@@ -2,7 +2,7 @@
 
 use DateTime;
 
-class Controller extends \core\Controller {
+class Controller extends \Core\Controller {
 
     public function index() {
         if (empty($_SESSION['user'])) {

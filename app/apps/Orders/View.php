@@ -1,3 +1,3 @@
 <?php namespace apps\Orders;
 
-class View extends \core\View{}
+class View extends \Core\View{}

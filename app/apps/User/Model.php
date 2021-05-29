@@ -2,7 +2,7 @@
 
 use PDO;
 
-class Model extends \core\Model
+class Model extends \Core\Model
 {
 
     public function checkUser($login, $password)

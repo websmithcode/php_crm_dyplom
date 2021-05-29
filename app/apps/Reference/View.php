@@ -1,3 +1,3 @@
 <?php namespace apps\Reference;
 
-class View extends \core\View{}
+class View extends \Core\View{}

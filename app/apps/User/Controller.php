@@ -1,7 +1,7 @@
 <?php namespace apps\User;
 
 
-class Controller extends \core\Controller{
+class Controller extends \Core\Controller{
     public function index()
     {
         $this->pageData['title'] = "Страница пользователя";

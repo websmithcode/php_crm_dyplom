@@ -1,6 +1,8 @@
-<?php
+<?php namespace apps\Orders;
 
-class OrdersModel extends Model
+use PDO;
+
+class Model extends \core\Model
 {
     public function getOrders($filters = null)
     {
@@ -34,6 +36,12 @@ class OrdersModel extends Model
             $stmt = $this->db->prepare($sql);
         }
         $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getPartnersArray(){
+        $sql = "SELECT * FROM partners";
+        $stmt = $this->db->prepare($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

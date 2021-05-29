@@ -1,6 +1,6 @@
-<?php
+<?php namespace apps\Index;
 
-class IndexController extends Controller {
+class Controller extends \Core\Controller {
 
     public function index() {
         $this->pageData['title'] = "Главная";

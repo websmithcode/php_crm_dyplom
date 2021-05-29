@@ -1,9 +1,13 @@
-<?php
+<?php namespace Core;
 
-class Model {
+use DB;
+
+class Model
+{
     protected $db = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = DB::connToDB();
     }
 }

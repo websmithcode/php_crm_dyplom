@@ -1,6 +1,8 @@
-<?php
+<?php namespace apps\User;
 
-class UserModel extends Model
+use PDO;
+
+class Model extends \core\Model
 {
 
     public function checkUser($login, $password)

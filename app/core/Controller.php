@@ -1,4 +1,4 @@
-<?php
+<?php namespace Core;
 
 class Controller
 {
@@ -12,22 +12,27 @@ class Controller
     public function __construct($action)
     {
         $controllerName = static::class;
-        $pageDirName = str_replace('Controller', '', $controllerName);
-        $modelName = $pageDirName . "Model";
-        $viewName = $pageDirName . "View";
+        $rawAppName = explode('\\', static::class);
+        $appName = $rawAppName[count($rawAppName) - 2];
+        $appNameSpace = "\\apps\\" . $appName . '\\';
 
+        $modelName = $appNameSpace . 'Model';
+        $viewName = $appNameSpace . 'View';
 
-        $this->action = $action;
-        $this->template = TEMPLATE_PATH . 'content/' . strtolower($pageDirName) . '/' . $action . '.tpl.php';
-        if ($controllerName == 'IndexController') {
-            $this->template = TEMPLATE_PATH . 'content/index.tpl.php';
-        }
-        $this->pageData['controllerName'] = $controllerName;
         $this->model = new $modelName();
         $this->view = new $viewName();
 
+
+        $this->action = $action;
+        $this->template = APPS_PATH . $appName . '/templates/' . $action . '.tpl.php';
+
+        $this->pageData['controllerName'] = $controllerName;
         $this->$action();
         $this->view->render($this->template, $this->pageData);
     }
 
+    public function exec()
+    {
+
+    }
 }

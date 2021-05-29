@@ -1,6 +1,9 @@
 <?php
-includeComponent('DateTimePickerComponent');
 
+use function Core\getCurrentPath;
+use function Core\includeComponent;
+
+includeComponent('DateTimePickerComponent');
 ?>
 <div class="container">
     <h1>Заказы</h1>

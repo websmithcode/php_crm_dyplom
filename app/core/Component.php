@@ -1,10 +1,12 @@
 <?php
+
 class Component
 {
     public $componentData;
     public $template;
 
-    public function __construct(){
+    public function __construct()
+    {
         $componentName = static::class;
         $componentDir = COMPONENT_PATH . $componentName . '/';
 
@@ -12,7 +14,8 @@ class Component
         $this->render($template, $this->componentData);
     }
 
-    public function render($template, $componentData ){
+    public function render($template, $componentData)
+    {
         include $template;
     }
 }

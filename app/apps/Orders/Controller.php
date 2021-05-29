@@ -1,6 +1,8 @@
-<?php
+<?php namespace apps\Orders;
 
-class OrdersController extends Controller {
+use DateTime;
+
+class Controller extends \core\Controller {
 
     public function index() {
         if (empty($_SESSION['user'])) {

@@ -1,13 +1,21 @@
 <?php
 
-class View {
-    public function render($tpl, $pageData) {
+class View
+{
+    public function render($tpl, $pageData)
+    {
 
-        function includeComponent($componentName){
-            include COMPONENT_PATH . $componentName . '/' . $componentName. '.php';
+        function includeComponent($componentName)
+        {
+            include COMPONENT_PATH . $componentName . '/' . $componentName . '.php';
         }
 
-        $cssName =  str_replace('Controller', '', $pageData['controllerName']);
+        function getCurrentPath()
+        {
+            return parse_url($_SERVER['REQUEST_URI'])['path'];
+        }
+
+        $cssName = str_replace('Controller', '', $pageData['controllerName']);
         $pageData['stylesCSS'] = CSS_URI . $cssName . '.css';
         include(TEMPLATE_PATH . "wrapper.php");
     }

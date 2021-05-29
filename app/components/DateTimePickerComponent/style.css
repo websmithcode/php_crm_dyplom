@@ -1,0 +1,38 @@
+.datetimepicker {
+    display: inline-flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;;
+}
+.datetimepicker:focus-within {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+}
+.datetimepicker input {
+    font: inherit;
+    color: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    border: 0;
+    background-color: transparent;
+}
+.datetimepicker input[type=date] {
+    width: 9rem;
+    padding: 0.25rem 0 0.25rem 0.5rem;
+    border-right-width: 0;
+}
+.datetimepicker input[type=time] {
+    width: 7rem;
+    padding: 0.25rem 0.5rem 0.25rem 0;
+    border-left-width: 0;
+}
+.datetimepicker span {
+    height: 1rem;
+    margin-right: 0.25rem;
+    margin-left: 0.25rem;
+    border-right: 1px solid #ddd;
+}

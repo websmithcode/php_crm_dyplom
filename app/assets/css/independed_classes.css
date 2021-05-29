@@ -1,3 +1,9 @@
 .filter-invert{
     filter: invert();
 }
+.w-max-content{
+    width: max-content;
+}
+.h-max-content{
+    height: max-content;
+}

@@ -3,6 +3,10 @@
 class OrdersController extends Controller {
 
     public function index() {
+        if (empty($_SESSION['user'])) {
+            header('Location: /user/login');
+        }
+
         $this->pageData['title'] = "Заказы";
 
         $filters = [];
@@ -16,6 +20,10 @@ class OrdersController extends Controller {
         $this->pageData['orders'] = $this->model->getOrders($filters);
     }
     public function ChangePrices() {
+        if (empty($_SESSION['user'])) {
+            header('Location: /user/login');
+        }
+
         $this->pageData['title'] = "Установка цен";
     }
 }

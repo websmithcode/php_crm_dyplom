@@ -8,6 +8,7 @@ const CORE_PATH = ROOT . "/core/";
 const CONTROLLER_PATH = ROOT . "/controllers/";
 const MODEL_PATH = ROOT . "/models/";
 const VIEW_PATH = ROOT . "/views/";
+const COMPONENT_PATH = ROOT . "/components/";
 const TEMPLATE_PATH = VIEW_PATH . "templates/";
 
 const ASSETS_URI = "/assets/";
@@ -18,9 +19,11 @@ const FONTS_URI = ASSETS_URI . "fonts/";
 
 require_once("db.php");
 require_once("route.php");
+
 require_once CORE_PATH . 'Model.php';
 require_once CORE_PATH . 'View.php';
 require_once CORE_PATH . 'Controller.php';
+require_once CORE_PATH . 'Component.php';
 
 
 Route::buildRoute();

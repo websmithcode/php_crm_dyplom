@@ -1,8 +1,6 @@
 <?php
 
-/*
-** Класс маршрутизации
-*/
+use Core\Functions;
 
 class Route
 {
@@ -12,8 +10,7 @@ class Route
         $app = 'Index';
         $action = "index";
 
-        $uriParts = explode("?", $_SERVER['REQUEST_URI']);
-        $route = explode("/", $uriParts[0]);
+        $route = explode("/", Functions::getCurrentPath());
 
         if ($route[1] != '') {
             $app = ucfirst($route[1]);

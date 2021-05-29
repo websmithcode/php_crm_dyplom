@@ -5,10 +5,12 @@ use Core\Functions;
 Functions::includeComponent('DateTimePicker');
 ?>
 <div class="container">
-    <h1>Заказы</h1>
+    <h1><?=$pageData['title']?></h1>
     <div>
         <div class="d-flex flex-row mb-3">
-
+            <a class="btn btn-primary h-max-content me-3" type="button" title="Добавить заказ" href="addorder/">
+                <i class="bi bi-plus-square"></i>
+            </a>
             <button class="btn btn-primary h-max-content me-3" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseFilters"
                     aria-expanded="false" aria-controls="collapseFilters">
@@ -18,17 +20,15 @@ Functions::includeComponent('DateTimePicker');
                 <div class="card card-body">
                     <form class="">
                         <div class="row">
-                            <label class="form-label">
-                                Диапазон дат
-                            </label>
+                            <label class="form-label">Диапазон дат</label>
                             <div class="row">
                                 <div class="input-group w-max-content">
-                                    <div class="input-group-text">От
-                                    </div><?php new DateTimePicker('fromDate', 'fromTime'); ?>
+                                    <div class="input-group-text">От</div>
+                                    <?php new DateTimePicker('fromDate', 'fromTime'); ?>
                                 </div>
                                 <div class="input-group w-max-content">
-                                    <div class="input-group-text">До
-                                    </div><?php new DateTimePicker('toDate', 'toTime'); ?>
+                                    <div class="input-group-text">До</div>
+                                    <?php new DateTimePicker('toDate', 'toTime'); ?>
                                 </div>
                             </div>
                         </div>

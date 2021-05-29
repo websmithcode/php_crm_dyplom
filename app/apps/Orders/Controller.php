@@ -41,11 +41,10 @@ class Controller extends \Core\Controller {
         $this->pageData['orders'] = $this->model->getOrders($filters);
         $this->pageData['partners'] = $this->model->getPartners();
     }
-    public function ChangePrices() {
+    public function AddOrder(){
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
-
-        $this->pageData['title'] = "Установка цен";
+        $this->pageData['title'] = "Добавление заказа";
     }
 }

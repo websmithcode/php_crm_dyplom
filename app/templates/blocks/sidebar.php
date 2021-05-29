@@ -24,17 +24,15 @@
                     <i class="bi bi-sliders"></i>
                     Заказы
                 </a>
-                <?php if ($_SESSION['user']['LoginRoleID'] == USER_ROLES['MANAGER']): ?>
-                    <ul class="nav nav-pills flex-column ms-5 mb-2">
-                        <li class="nav-item">
-                            <a href="/orders/changeprices" class="text-white text-decoration-none"
-                               aria-current="page">
-                                Установка цен
-                            </a>
-                        </li>
-                    </ul>
-                <?php endif ?>
             </li>
+            <?php if ($_SESSION['user']['LoginRoleID'] == USER_ROLES['MANAGER']): ?>
+                <li class="nav-item">
+                    <a href="/prices/" class="nav-link text-white">
+                        <i class="bi bi-currency-dollar"></i>
+                        Цены
+                    </a>
+                </li>
+            <?php endif ?>
             <li class="nav-item">
                 <a href="/handbook/" class="nav-link text-white">
                     <i class="bi bi-gear-fill"></i>

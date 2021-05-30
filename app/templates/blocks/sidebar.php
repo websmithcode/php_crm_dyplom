@@ -3,7 +3,7 @@
 use Core\Functions;
 
 ?>
-<aside class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark vh-100 position-fixed" id="sidebar">
+<aside class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark vh-100 position-fixed overflow-auto" id="sidebar">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
         <img class="me-3 filter-invert" src="<?= IMG_URI . 'logo.png' ?>" alt="" width="36" height="36">
     </a>

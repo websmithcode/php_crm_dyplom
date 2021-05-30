@@ -11,9 +11,7 @@ class Model extends \Core\Model
                     DATE_FORMAT(o.OrderDate, '%d.%m.%Y в %H:%i:%s') as 'Дата заказа',
                     DATE_FORMAT(pc.CommisionDate, '%d.%m.%Y в %H:%i:%s') as 'Дата начисления комиссии',
                     o.OrderCost as 'Сумма заказа',
-                    pc.CommissionSumma as 'Сумма комиссии',
-                    o.PartnerID,
-                    o.OrderID
+                    pc.CommissionSumma as 'Сумма комиссии'
                 FROM partnercommissions as pc
                 JOIN orders as o on o.OrderID = pc.OrderID
                 WHERE pc.PartnerID = :PartnerID";

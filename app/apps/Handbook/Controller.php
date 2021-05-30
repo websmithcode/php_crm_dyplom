@@ -28,6 +28,7 @@ class Controller extends \Core\Controller
         }
 
         $this->pageData['title'] = "Размеры";
+        $this->pageData['sizes'] = $this->model->getSizes();
     }
 
     public function materials()

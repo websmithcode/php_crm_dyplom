@@ -1,8 +1,10 @@
 <?php namespace apps\Handbook;
 
 
-class Controller extends \Core\Controller{
-    public function index() {
+class Controller extends \Core\Controller
+{
+    public function index()
+    {
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
@@ -10,28 +12,35 @@ class Controller extends \Core\Controller{
         $this->pageData['title'] = "Справочники";
     }
 
-    public function prints() {
+    public function prints()
+    {
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
-
         $this->pageData['title'] = "Принты";
+        $this->pageData['prints'] = $this->model->getPrints();
     }
-    public function sizes() {
+
+    public function sizes()
+    {
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
 
         $this->pageData['title'] = "Размеры";
     }
-    public function materials() {
+
+    public function materials()
+    {
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
 
         $this->pageData['title'] = "Материалы";
     }
-    public function partners() {
+
+    public function partners()
+    {
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }

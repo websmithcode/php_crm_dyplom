@@ -38,6 +38,7 @@ class Controller extends \Core\Controller
         }
 
         $this->pageData['title'] = "Материалы";
+        $this->pageData['materials'] = $this->model->getMaterials();
     }
 
     public function partners()

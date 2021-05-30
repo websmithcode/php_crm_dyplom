@@ -20,4 +20,12 @@ class Model extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getMaterials()
+    {
+        $sql = "SELECT MaterialID as 'ID', MaterialName as 'Название материала' FROM materials";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

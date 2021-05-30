@@ -17,6 +17,7 @@ const FONTS_URI = ASSETS_URI . "fonts/";
 
 require_once("db.php");
 require_once("route.php");
+require_once("state.php");
 
 require_once CORE_PATH . 'Model.php';
 require_once CORE_PATH . 'View.php';
@@ -24,5 +25,6 @@ require_once CORE_PATH . 'Functions.php';
 require_once CORE_PATH . 'Controller.php';
 require_once CORE_PATH . 'Component.php';
 
+$STATE = new State();
 
 Route::buildRoute();

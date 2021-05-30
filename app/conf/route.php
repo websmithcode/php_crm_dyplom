@@ -24,23 +24,42 @@ class Route
         }
 
         $controllerName = "\\apps\\$app\\Controller";
-        if ((isset($route[3]) && !empty($route[3])) | !class_exists($controllerName) | !method_exists($controllerName, $action)) {
-            static::errorPage();
+        global $STATE;
+
+        if (!class_exists($controllerName) | !method_exists($controllerName, $action)) {
+            static::err404();
             return;
         }
-        new $controllerName($action);
+        $controller = new $controllerName();
+        if (isset($route[$STATE->maxDepth + 1]) && !empty($route[$STATE->maxDepth + 1])) {
+            static::err404();
+            return;
+        }
+        $controller->exec($action);
     }
-    public static function errorPage()
+
+    public static function reduceSlashes()
     {
-        echo "<h1>404 error</h1><h2>Page not found</h2>";
-    }
-    public static function reduceSlashes(){
-        if (str_contains(Functions::getCurrentPath(), '//')){
+        if (str_contains(Functions::getCurrentPath(), '//')) {
             $reduced = Functions::getCurrentPath();
-            while (str_contains($reduced, '//')){
+            while (str_contains($reduced, '//')) {
                 $reduced = preg_replace("/\/{2}/", '/', $reduced);
             }
             header("Location: $reduced");
         }
+    }
+
+    public static function err404()
+    {
+        global $STATE;
+        $STATE->httpCode = 404;
+        $STATE->error = 'Page not found';
+        static::errorPage();
+    }
+
+    public static function errorPage($httpCode = null, $error = null)
+    {
+        global $STATE;
+        printf("<h1>%s error</h1><h2>%s</h2>", $httpCode ?? $STATE->httpCode, $error ?? $STATE->error);
     }
 }

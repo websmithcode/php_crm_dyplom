@@ -1,20 +1,22 @@
 <?php namespace Core;
 
+use Route;
+
 class Controller
 {
 
-    public $model;
-    public $view;
-    public $action;
-    public $template;
-    protected $pageData = array();
+    public object $model;
+    public object $view;
+    public string $action;
+    public string $appName;
+    public string $template;
+    protected array $pageData = array();
 
-    public function __construct($action)
+    public function __construct()
     {
         $controllerName = static::class;
-        $rawAppName = explode('\\', static::class);
-        $appName = $rawAppName[count($rawAppName) - 2];
-        $appNameSpace = "\\apps\\" . $appName . '\\';
+        $this->appName = Functions::getAppName();
+        $appNameSpace = "\\apps\\" . $this->appName . '\\';
 
         $modelName = $appNameSpace . 'Model';
         $viewName = $appNameSpace . 'View';
@@ -22,17 +24,18 @@ class Controller
         $this->model = new $modelName();
         $this->view = new $viewName();
 
-
-        $this->action = $action;
-        $this->template = APPS_PATH . $appName . '/templates/' . $action . '.tpl.php';
-
         $this->pageData['controllerName'] = $controllerName;
-        $this->$action();
-        $this->view->render($this->template, $this->pageData);
     }
 
-    public function exec()
+    public function exec($action)
     {
-
+        global $STATE;
+        $this->template = APPS_PATH . $this->appName . '/templates/' . $action . '.tpl.php';
+        $this->$action();
+        if ($STATE->httpCode >= 400) {
+            Route::errorPage();
+            return;
+        }
+        $this->view->render($this->template, $this->pageData);
     }
 }

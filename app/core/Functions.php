@@ -3,21 +3,27 @@
 
 class Functions
 {
-    public static function includeComponent($componentName){
+    public static function includeComponent($componentName)
+    {
         include COMPONENT_PATH . $componentName . '/' . $componentName . '.php';
-    }
-
-    public static function getCurrentPath(){
-        return parse_url($_SERVER['REQUEST_URI'])['path'];
     }
 
     public static function getAppName(): string
     {
-        return ucfirst(explode('/', static::getCurrentPath())[1]);
+        $_pathParts = explode('/', static::getCurrentPath());
+        $appName = @$_pathParts[1];
+        return ucfirst(!empty($appName) ? $appName : 'Index');
     }
+
+    public static function getCurrentPath()
+    {
+        return parse_url($_SERVER['REQUEST_URI'])['path'];
+    }
+
     public static function getActionName(): string
     {
-        $action = explode('/', static::getCurrentPath())[2];
-        return ucfirst(!empty($action) ? $action : 'Index');
+        $_pathParts = explode('/', static::getCurrentPath());
+        $action = @$_pathParts[2];
+        return !empty($action) ? $action : 'index';
     }
 }

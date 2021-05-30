@@ -22,11 +22,11 @@ class Controller extends \Core\Controller
             $login = $_POST['login'];
             $password = md5($_POST['password']);
 
-            $loggedInUser = $this->model->checkUser($login, $password);
-            if (!$loggedInUser) {
+            $userID = $this->model->checkUser($login, $password);
+            if (empty($userID)) {
                 $this->pageData['error'] = "Не правильный логин или пароль";
             } else {
-                $_SESSION['user'] = $loggedInUser;
+                $_SESSION['user'] = $userID;
                 header("Location: /user");
             }
         }

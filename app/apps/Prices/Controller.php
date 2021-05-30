@@ -20,7 +20,7 @@ class Controller extends \Core\Controller
         if (@$_GET['toDate'] && @$_GET['toTime']) {
             $filters['toDatetime'] = DateTime::createFromFormat('Y-m-d H:i:s', $_GET['toDate'] . ' ' . $_GET['toTime'] . ':00');
         }
-        if (@$_GET['partner'] && $_SESSION['user']['LoginRoleID'] == USER_ROLES['MANAGER']) {
+        if (@$_GET['partner'] && $this->sessUser->LoginRoleID == USER_ROLES['MANAGER']) {
             $matches = [];
             preg_match("/^(\d+)\)/", $_GET['partner'], $matches['PartnerID']);
             preg_match("/\)\s(.+)\s\(/", $_GET['partner'], $matches['PartnerName']);

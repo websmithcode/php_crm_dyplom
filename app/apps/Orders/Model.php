@@ -4,9 +4,9 @@ use PDO;
 
 class Model extends \Core\Model
 {
-    public function getOrders($filters = null)
+    public function getOrders($sessUser, $filters = null)
     {
-        $_isManager = $_SESSION['user']['LoginRoleID'] == USER_ROLES['MANAGER'];
+        $_isManager = $sessUser->LoginRoleID== USER_ROLES['MANAGER'];
         $sql = "SELECT 
                         o.OrderID as 'Номер заказа', 
                         DATE_FORMAT(o.OrderDate, '%d.%m.%Y в %H:%i:%s') as 'Дата заказа',
@@ -59,7 +59,7 @@ class Model extends \Core\Model
             $sql .= $_where ? " AND" : " WHERE";
             $sql .= " o.PartnerID = :partnerID";
             $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(":partnerID", $_SESSION['user']['PartnerID']);
+            $stmt->bindValue(":partnerID", $sessUser->PartnerID);
         } else {
             $stmt = $this->db->prepare($sql);
         }

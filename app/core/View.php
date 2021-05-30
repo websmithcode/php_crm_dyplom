@@ -9,7 +9,7 @@ class View
 //        $this->template = $template;
 //    }
 
-    public function render($tpl, $pageData)
+    public function render($tpl, $pageData, $sessUser)
     {
         $appName = Functions::getAppName();
         $pageData['styleCSS'] = CSS_URI . $appName . '.css';

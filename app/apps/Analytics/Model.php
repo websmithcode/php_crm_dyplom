@@ -5,16 +5,17 @@ use PDO;
 class Model extends \Core\Model
 {
 
-    public function getPartnerCommissions($filters = null)
+    public function getPartnerCommissions($sessUser, $filters = null): array
     {
+        $_isManager = $sessUser->LoginRoleID == USER_ROLES['MANAGER'];
         $sql = "SELECT 
                     DATE_FORMAT(o.OrderDate, '%d.%m.%Y в %H:%i:%s') as 'Дата заказа',
                     DATE_FORMAT(pc.CommisionDate, '%d.%m.%Y в %H:%i:%s') as 'Дата начисления комиссии',
                     o.OrderCost as 'Сумма заказа',
-                    pc.CommissionSumma as 'Сумма комиссии'
-                FROM partnercommissions as pc
-                JOIN orders as o on o.OrderID = pc.OrderID
-                WHERE pc.PartnerID = :PartnerID";
+                    pc.CommissionSumma as 'Сумма комиссии'".
+                    ($_isManager ? ", pc.PartnerID as 'ID партнера'" : "") .
+            " FROM partnercommissions as pc
+                JOIN orders as o on o.OrderID = pc.OrderID";
         if (!empty($filters)) {
             if (!empty($filters['fromDatetimeOrder'])) {
                 $strFromDateTime = $filters['fromDatetimeOrder']->format('Y-m-d H:i:s');
@@ -33,8 +34,13 @@ class Model extends \Core\Model
                 $sql .= sprintf(" AND pc.CommisionDate < '%s'", $strToDateTime);
             }
         }
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':PartnerID', $_SESSION['user']['PartnerID']);
+        if (!$_isManager) {
+            $sql .= " WHERE pc.PartnerID = :PartnerID";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':PartnerID', $_SESSION['user']);
+        } else {
+            $stmt = $this->db->prepare($sql);
+        }
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

@@ -33,6 +33,6 @@ class Controller extends \Core\Controller
         }
 
         $this->pageData['title'] = "Аналитика: Комиссия партнеров";
-        $this->pageData['partnerCommissions'] = $this->model->getPartnerCommissions($filters);
+        $this->pageData['partnerCommissions'] = $this->model->getPartnerCommissions($this->sessUser, $filters);
     }
 }

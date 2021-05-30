@@ -8,9 +8,10 @@ class Controller
     public object $model;
     public object $view;
     public string $action;
-    public string $appName;
     public string $template;
+    protected string $appName;
     protected array $pageData = array();
+    protected $sessUser;
 
     public function __construct()
     {
@@ -25,6 +26,7 @@ class Controller
         $this->view = new $viewName();
 
         $this->pageData['controllerName'] = $controllerName;
+        $this->sessUser = $this->model->getSessUser();
     }
 
     public function exec($action)
@@ -36,6 +38,7 @@ class Controller
             Route::errorPage();
             return;
         }
-        $this->view->render($this->template, $this->pageData);
+        $this->view->render($this->template, $this->pageData, $this->sessUser);
     }
+
 }

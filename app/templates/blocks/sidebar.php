@@ -32,7 +32,8 @@ use Core\Functions;
                     Заказы
                 </a>
             </li>
-            <?php if ($_SESSION['user']['LoginRoleID'] == USER_ROLES['MANAGER']): ?>
+            <?php
+            if ($sessUser->LoginRoleID== USER_ROLES['MANAGER']): ?>
                 <li class="nav-item">
                     <a href="/prices/"
                        class="nav-link text-white <?= Functions::getAppName() == 'Prices' ? 'active' : '' ?>">
@@ -69,7 +70,7 @@ use Core\Functions;
                             Материалы
                         </a>
                     </li>
-                    <?php if ($_SESSION['user']['LoginRoleID'] == USER_ROLES['MANAGER']): ?>
+                    <?php if ($sessUser->LoginRoleID== USER_ROLES['MANAGER']): ?>
                         <li class="nav-item">
                             <a href="/handbook/partners/"
                                class="text-white text-decoration-none <?= Functions::getActionName() == 'partners' ? 'text-decoration-underline' : '' ?>"
@@ -102,7 +103,7 @@ use Core\Functions;
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="<?= IMG_URI ?>user_icon.svg" alt="" class="rounded-circle me-2" width="32" height="32">
-                <strong><?= $_SESSION['user']['LoginName'] ?></strong>
+                <strong><?= $sessUser->LoginName?></strong>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
                 <li><a class="dropdown-item" href="/user">Профиль</a></li>

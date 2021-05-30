@@ -8,7 +8,7 @@ class Model extends \Core\Model
     {
         $sql = "SELECT 
                     pc.ProductID as 'ID',
-                    pc.PriceDate as 'Дата', 
+                    DATE_FORMAT(pc.PriceDate, '%d.%m.%Y в %H:%i:%s') as 'Дата', 
                     m.MaterialName as 'Материал',
                     pt.PrintTypeName as 'Тип принта',
                     pc.Price as 'Цена'       

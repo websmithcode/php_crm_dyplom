@@ -33,7 +33,7 @@ Functions::includeComponent('DateTimePicker');
                             </div>
                         </div>
                         <hr>
-                        <?php if ($_SESSION['user']['LoginRoleID'] == USER_ROLES['MANAGER']): ?>
+                        <?php if ($sessUser->LoginRoleID== USER_ROLES['MANAGER']): ?>
                             <div class="row">
                                 <div class="input-group">
 

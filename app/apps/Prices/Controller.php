@@ -2,9 +2,11 @@
 
 use DateTime;
 
-class Controller extends \Core\Controller {
+class Controller extends \Core\Controller
+{
 
-    public function index() {
+    public function index()
+    {
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
@@ -24,29 +26,33 @@ class Controller extends \Core\Controller {
             preg_match("/\)\s(.+)\s\(/", $_GET['partner'], $matches['PartnerName']);
             preg_match("/\((.+)\)/", $_GET['partner'], $matches['PartnerEmail']);
             preg_match("/\[(.+)]$/", $_GET['partner'], $matches['PartnerRequisites']);
-            if (!empty($matches['PartnerID'])){
+            if (!empty($matches['PartnerID'])) {
                 $filters['PartnerID'] = $matches['PartnerID'][1];
             }
-            if (!empty($matches['PartnerName'])){
+            if (!empty($matches['PartnerName'])) {
                 $filters['PartnerName'] = $matches['PartnerName'][1];
             }
-            if (!empty($matches['PartnerEmail'])){
+            if (!empty($matches['PartnerEmail'])) {
                 $filters['PartnerEmail'] = $matches['PartnerEmail'][1];
             }
-            if (!empty($matches['PartnerRequisites'])){
+            if (!empty($matches['PartnerRequisites'])) {
                 $filters['PartnerRequisites'] = $matches['PartnerRequisites'][1];
             }
         }
 
         $this->pageData['prices'] = $this->model->getPrices($filters);
     }
-    public function AddPrice(){
+
+    public function AddPrice()
+    {
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
         $this->pageData['title'] = "Добавление цены";
     }
-    public function ChangePrice() {
+
+    public function ChangePrice()
+    {
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }

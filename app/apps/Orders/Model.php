@@ -11,9 +11,9 @@ class Model extends \Core\Model
                         o.OrderID as 'Номер заказа', 
                         DATE_FORMAT(o.OrderDate, '%d.%m.%Y в %H:%i:%s') as 'Дата заказа',
                         s.StateName as 'Статус'," .
-                        ($_isManager ? "p.PartnerName as 'Партнер',
-                        CONCAT(c.ClientSurName, ' ', c.ClientName, ' ', c.ClientMiddleName) as 'Клиент'," : "").
-                        "o.OrderCost as 'Сумма заказа',
+            ($_isManager ? "p.PartnerName as 'Партнер',
+                        CONCAT(c.ClientSurName, ' ', c.ClientName, ' ', c.ClientMiddleName) as 'Клиент'," : "") .
+            "o.OrderCost as 'Сумма заказа',
                         ROUND(o.OrderCost * p.Commission * 0.01, 2) as 'Комиссия партнера'
                     FROM orders as o 
                     JOIN partners as p on p.PartnerID = o.PartnerID 

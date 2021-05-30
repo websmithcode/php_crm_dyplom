@@ -15,7 +15,7 @@ class Model extends \Core\Model
 
         $res = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!empty($res)){
+        if (!empty($res)) {
             return $res;
         } else {
             return false;

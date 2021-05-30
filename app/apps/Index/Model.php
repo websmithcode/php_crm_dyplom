@@ -1,8 +1,7 @@
 <?php namespace apps\Index;
 
-class Model extends \Core\Model {
-
-
+class Model extends \Core\Model
+{
 
 
 }

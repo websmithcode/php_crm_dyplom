@@ -13,7 +13,7 @@ class View
     {
         $appName = Functions::getAppName();
         $pageData['styleCSS'] = CSS_URI . $appName . '.css';
-        $pageData['scriptJS'] = JS_URI .  $appName . '.js';
+        $pageData['scriptJS'] = JS_URI . $appName . '.js';
         include(TEMPLATE_PATH . "wrapper.php");
     }
 }

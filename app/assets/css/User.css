@@ -1,11 +1,13 @@
-.form-signin{
+.form-signin {
     max-width: 330px;
 }
-#floatingLogin{
+
+#floatingLogin {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-#floatingPassword{
+
+#floatingPassword {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }

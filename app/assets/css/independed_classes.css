@@ -1,12 +1,15 @@
-.filter-invert{
+.filter-invert {
     filter: invert();
 }
-.w-max-content{
+
+.w-max-content {
     width: max-content;
 }
-.h-max-content{
+
+.h-max-content {
     height: max-content;
 }
-.hover-pointer:hover{
+
+.hover-pointer:hover {
     cursor: pointer;
 }

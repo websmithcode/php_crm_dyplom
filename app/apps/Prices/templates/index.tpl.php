@@ -5,7 +5,7 @@ use Core\Functions;
 Functions::includeComponent('DateTimePicker');
 ?>
 <div class="container">
-    <h1><?=$pageData['title']?></h1>
+    <h1><?= $pageData['title'] ?></h1>
     <div>
         <div class="d-flex flex-row mb-3">
             <a class="btn btn-primary h-max-content me-3" type="button" title="Добавить заказ" href="addprice/">

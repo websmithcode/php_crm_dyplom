@@ -1,8 +1,7 @@
 <?php namespace apps\Reference;
 
-class Model extends \Core\Model {
-
-
+class Model extends \Core\Model
+{
 
 
 }

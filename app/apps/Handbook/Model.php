@@ -28,4 +28,18 @@ class Model extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getPartners()
+    {
+        $sql = "SELECT 
+                    PartnerID as 'ID',
+                    PartnerName as 'Имя партнера', 
+                    Commission as 'Комиссия партнера', 
+                    PartnerEmail as 'Email партнера', 
+                    PartnerRequisites as 'Реквизиты партнера' 
+                FROM partners";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

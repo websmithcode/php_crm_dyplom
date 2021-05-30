@@ -48,5 +48,6 @@ class Controller extends \Core\Controller
         }
 
         $this->pageData['title'] = "Партнеры";
+        $this->pageData['partners'] = $this->model->getPartners();
     }
 }

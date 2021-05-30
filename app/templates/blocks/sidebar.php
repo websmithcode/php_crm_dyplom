@@ -81,13 +81,13 @@ use Core\Functions;
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link text-white">
+                <a href="/analytics/" class="nav-link text-white  <?= Functions::getAppName() == 'Analytics' ? 'active' : '' ?>">
                     <i class="bi bi-graph-up"></i>
                     Аналитика
                 </a>
                 <ul class="nav nav-pills flex-column ms-5 mb-2">
                     <li class="nav-item">
-                        <a href="/" class="text-white text-decoration-none"
+                        <a href="/analytics/partner_commission/" class="text-white text-decoration-none <?= Functions::getActionName() == 'partner_commission' ? 'text-decoration-underline' : '' ?>"
                            aria-current="page">
                             Комиссия партнера
                         </a>

@@ -70,6 +70,7 @@ Functions::includeComponent('DateTimePicker');
                     foreach ($pageData['partnerCommissions'] as $partnerCommission):
                         ?>
                         <tr>
+                            <th scope="col"><?= array_shift($partnerCommission) ?></th>
                             <?php foreach ($partnerCommission as $key => $col):
                                 ?>
                                 <td><?= $col ?></td>

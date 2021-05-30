@@ -8,14 +8,18 @@ class Model extends \Core\Model
     public function getPartnerCommissions($sessUser, $filters = null): array
     {
         $_isManager = $sessUser->LoginRoleID == USER_ROLES['MANAGER'];
-        $sql = "SELECT 
-                    DATE_FORMAT(o.OrderDate, '%d.%m.%Y в %H:%i:%s') as 'Дата заказа',
+        $sql = "SELECT ".
+                    ($_isManager ? "pc.PartnerID as 'ID партнера' , p.PartnerName as 'Имя партнера' , " : "") .
+                    "
+                    p.Commission as '% комиссии',
+                    pc.CommissionSumma as 'Сумма комиссии',
                     DATE_FORMAT(pc.CommisionDate, '%d.%m.%Y в %H:%i:%s') as 'Дата начисления комиссии',
-                    o.OrderCost as 'Сумма заказа',
-                    pc.CommissionSumma as 'Сумма комиссии'".
-                    ($_isManager ? ", pc.PartnerID as 'ID партнера'" : "") .
-            " FROM partnercommissions as pc
-                JOIN orders as o on o.OrderID = pc.OrderID";
+                    o.OrderID as 'ID заказа',
+                    DATE_FORMAT(o.OrderDate, '%d.%m.%Y в %H:%i:%s') as 'Дата заказа',
+                    o.OrderCost as 'Сумма заказа'
+            FROM partnercommissions as pc
+            JOIN orders as o on o.OrderID = pc.OrderID
+            JOIN partners as p on p.PartnerID = pc.PartnerID";
         if (!empty($filters)) {
             if (!empty($filters['fromDatetimeOrder'])) {
                 $strFromDateTime = $filters['fromDatetimeOrder']->format('Y-m-d H:i:s');

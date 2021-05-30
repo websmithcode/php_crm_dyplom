@@ -2,9 +2,11 @@
     <h1><?= $pageData['title'] ?></h1>
     <div>
         <div class="d-flex flex-row mb-3">
-            <a class="btn btn-primary h-max-content me-3" type="button" title="Добавить заказ" href="addpartner/">
-                <i class="bi bi-plus-square"></i>
-            </a>
+            <?php if ($sessUser->LoginRoleID == USER_ROLES['MANAGER']): ?>
+                <a class="btn btn-primary h-max-content me-3" type="button" title="Добавить заказ" href="addpartner/">
+                    <i class="bi bi-plus-square"></i>
+                </a>
+            <?php endif; ?>
         </div>
         <div class="card">
             <?php if (!empty($pageData['partners'])): ?>

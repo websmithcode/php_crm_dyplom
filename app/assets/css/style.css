@@ -11,6 +11,7 @@ body {
 
 #sidebar {
     width: var(--sidebar-width);
+    z-index: var(--sidebar-z-index);
 }
 
 #content {

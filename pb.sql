@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: May 30, 2021 at 01:16 PM
+-- Generation Time: May 31, 2021 at 12:08 PM
 -- Server version: 8.0.25
 -- PHP Version: 7.4.16
 
@@ -92,7 +92,7 @@ CREATE TABLE `logins` (
 
 INSERT INTO `logins` (`LoginID`, `LoginName`, `LoginPassword`, `LoginRoleID`, `PartnerID`) VALUES
 (1, 'Ars', '202cb962ac59075b964b07152d234b70', 2, 1),
-(2, 'Ars2', '202cb962ac59075b964b07152d234b70', 1, 6);
+(2, 'Ars2', '202cb962ac59075b964b07152d234b70', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -128,7 +128,7 @@ CREATE TABLE `orderdetails` (
   `SizeID` tinyint NOT NULL,
   `DiscountID` tinyint NOT NULL,
   `Price` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `DiscountValue` decimal(2,1) GENERATED ALWAYS AS (1) STORED NOT NULL,
+  `DiscountValue` decimal(2,1) NOT NULL DEFAULT '1.0',
   `Quantity` smallint NOT NULL DEFAULT '0',
   `Summa` decimal(20,2) GENERATED ALWAYS AS (((`Price` * `DiscountValue`) * `Quantity`)) VIRTUAL NOT NULL
 ) ENGINE=InnoDB AVG_ROW_LENGTH=1170 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -137,30 +137,78 @@ CREATE TABLE `orderdetails` (
 -- Dumping data for table `orderdetails`
 --
 
-INSERT INTO `orderdetails` (`OrderID`, `OrderDetailID`, `ProductCostID`, `PrintID`, `SizeID`, `DiscountID`, `Price`, `Quantity`) VALUES
-(14, 25, 5, 10, 3, 2, '300.00', 2),
-(14, 29, 1, 6, 1, 1, '1200.00', 1),
-(27, 30, 1, 1, 1, 3, '1690.00', 2),
-(27, 31, 2, 14, 3, 2, '1889.00', 1),
-(19, 32, 4, 9, 2, 3, '2188.00', 2),
-(19, 33, 1, 6, 7, 1, '1690.00', 2),
-(31, 34, 1, 9, 5, 2, '1690.00', 1),
-(32, 35, 1, 8, 5, 2, '1690.00', 1),
-(31, 36, 5, 4, 4, 1, '2089.00', 1),
-(32, 37, 3, 13, 1, 1, '1989.00', 2),
-(24, 38, 1, 11, 6, 3, '1690.00', 5),
-(24, 39, 6, 5, 4, 2, '2288.00', 1),
-(26, 40, 3, 10, 3, 1, '1989.00', 1),
-(26, 41, 5, 7, 8, 2, '2089.00', 4);
+INSERT INTO `orderdetails` (`OrderID`, `OrderDetailID`, `ProductCostID`, `PrintID`, `SizeID`, `DiscountID`, `Price`, `DiscountValue`, `Quantity`) VALUES
+(14, 25, 5, 10, 3, 2, '300.00', '0.3', 2),
+(14, 29, 1, 6, 1, 1, '1690.00', '1.0', 1),
+(27, 30, 1, 1, 1, 3, '1690.00', '1.0', 2),
+(27, 31, 2, 14, 3, 2, '1889.00', '1.0', 1),
+(19, 32, 4, 9, 2, 3, '2188.00', '1.0', 2),
+(19, 33, 1, 6, 7, 1, '1690.00', '1.0', 2),
+(31, 34, 1, 9, 5, 2, '1690.00', '1.0', 1),
+(32, 35, 1, 8, 5, 2, '1690.00', '1.0', 1),
+(31, 36, 5, 4, 4, 1, '2089.00', '1.0', 1),
+(32, 37, 3, 13, 1, 1, '1989.00', '1.0', 2),
+(24, 38, 1, 11, 6, 3, '1690.00', '1.0', 5),
+(24, 39, 6, 5, 4, 2, '2288.00', '1.0', 1),
+(26, 40, 3, 10, 3, 1, '1989.00', '1.0', 1),
+(26, 41, 5, 7, 8, 2, '2089.00', '1.0', 4);
 
 --
 -- Triggers `orderdetails`
 --
 DELIMITER $$
-CREATE TRIGGER `tr_orderdetails_summa` AFTER UPDATE ON `orderdetails` FOR EACH ROW BEGIN
+CREATE TRIGGER `tr_af_delete_orderdetails_summa` AFTER DELETE ON `orderdetails` FOR EACH ROW BEGIN
+  UPDATE orders o
+  SET o.OrderCost = o.OrderCost - OLD.Summa
+  WHERE o.OrderID = OLD.OrderID;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tr_af_insert_orderdetails_summa` AFTER INSERT ON `orderdetails` FOR EACH ROW BEGIN
+  UPDATE orders o
+  SET o.OrderCost = o.OrderCost + NEW.Summa
+  WHERE o.OrderID = NEW.OrderID;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tr_af_update_orderdetails_summa` AFTER UPDATE ON `orderdetails` FOR EACH ROW BEGIN
   UPDATE orders o
   SET o.OrderCost = o.OrderCost + NEW.Summa - OLD.Summa
   WHERE o.OrderID = OLD.OrderID;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tr_bf_insert_orderdetails` BEFORE INSERT ON `orderdetails` FOR EACH ROW BEGIN
+  SET @discountvalue = (SELECT
+      DiscountValue
+    FROM discounts AS d
+    WHERE DiscountID = NEW.DiscountID);
+  SET NEW.DiscountValue = @discountvalue;
+
+  SET @price = (SELECT
+      Price
+    FROM productcosts AS p
+    WHERE ProductCostID = NEW.ProductCostID);
+  SET NEW.Price = @price;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tr_bf_update_orderdetails` BEFORE UPDATE ON `orderdetails` FOR EACH ROW BEGIN
+  SET @discountvalue = (SELECT
+      DiscountValue
+    FROM discounts AS d
+    WHERE DiscountID = NEW.DiscountID);
+  SET NEW.DiscountValue = @discountvalue;
+
+  SET @price = (SELECT
+      Price
+    FROM productcosts AS p
+    WHERE ProductCostID = NEW.ProductCostID);
+  SET NEW.Price = @price;
 END
 $$
 DELIMITER ;
@@ -173,7 +221,7 @@ DELIMITER ;
 
 CREATE TABLE `orders` (
   `OrderID` bigint NOT NULL,
-  `OrderDate` datetime NOT NULL,
+  `OrderDate` datetime NOT NULL DEFAULT (now()),
   `ClientID` bigint NOT NULL,
   `PartnerID` int NOT NULL,
   `StateID` tinyint NOT NULL,
@@ -185,7 +233,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`OrderID`, `OrderDate`, `ClientID`, `PartnerID`, `StateID`, `OrderCost`) VALUES
-(14, '2019-12-28 00:00:00', 1, 1, 3, '1800.00'),
+(14, '2019-12-28 00:00:00', 1, 1, 3, '1870.00'),
 (18, '2019-12-04 00:00:00', 2, 1, 1, '4444.70'),
 (19, '2019-11-07 00:00:00', 4, 2, 1, '3380.00'),
 (24, '2019-12-30 00:00:00', 8, 4, 1, '507.00'),
@@ -202,11 +250,16 @@ INSERT INTO `orders` (`OrderID`, `OrderDate`, `ClientID`, `PartnerID`, `StateID`
 --
 DELIMITER $$
 CREATE TRIGGER `tr_orders_commission` AFTER UPDATE ON `orders` FOR EACH ROW BEGIN
-  IF NEW.StateID = 3 THEN
+  IF NEW.StateID = 3
+    AND NEW.StateID != OLD.StateID THEN
     SET @commissionPercent = (SELECT
         Commission
       FROM Partners
       WHERE PartnerID = NEW.PartnerID);
+    DELETE
+      FROM partnercommissions
+    WHERE OrderID = NEW.OrderID
+      AND PaertnerID = NEW.PartnerID;
     INSERT INTO partnercommissions (OrderID, PartnerID, CommissionSumma)
       VALUES (NEW.OrderID, NEW.PartnerID, NEW.OrderCost * @commissionPercent * 0.01);
   END IF;
@@ -225,7 +278,7 @@ CREATE TABLE `partnercommissions` (
   `OrderID` bigint NOT NULL,
   `CommisionDate` datetime NOT NULL DEFAULT (now()),
   `CommissionSumma` decimal(12,2) NOT NULL DEFAULT '0.00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AVG_ROW_LENGTH=8192 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `partnercommissions`
@@ -258,8 +311,7 @@ INSERT INTO `partners` (`PartnerID`, `PartnerName`, `Commission`, `PartnerEmail`
 (2, 'Василий', '20.00', 'racerin933@bk.ru', '1112 5633 7765 8937'),
 (3, 'Татьяна', '25.00', 'vagova44@mail.ru', '3422 0998 5553 1324'),
 (4, 'Аркадий', '20.00', 'arkan@mail.ru', '6644 7766 0856 7944'),
-(5, 'Нелли', '20.00', 'nllrty@bk.ru', '3155 6247 8209 6261'),
-(6, 'Арсений2', '25.00', 'qwe@bk2.ru', '4330 5133 6700 1224');
+(5, 'Нелли', '20.00', 'nllrty@bk.ru', '3155 6247 8209 6261');
 
 -- --------------------------------------------------------
 
@@ -327,7 +379,7 @@ CREATE TABLE `productcosts` (
   `ProductCostID` bigint NOT NULL,
   `ProductID` bigint NOT NULL,
   `Price` decimal(12,2) NOT NULL,
-  `PriceDate` datetime NOT NULL
+  `PriceDate` datetime NOT NULL DEFAULT (now())
 ) ENGINE=InnoDB AVG_ROW_LENGTH=2730 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -340,7 +392,11 @@ INSERT INTO `productcosts` (`ProductCostID`, `ProductID`, `Price`, `PriceDate`) 
 (3, 3, '1989.00', '2019-12-15 21:14:01'),
 (4, 4, '2188.00', '2019-12-15 21:15:52'),
 (5, 5, '2089.00', '2019-12-15 21:15:55'),
-(6, 6, '2288.00', '2019-12-15 21:15:56');
+(6, 6, '2288.00', '2019-12-15 21:15:56'),
+(7, 1, '1710.00', '2021-05-31 10:36:11'),
+(8, 2, '1890.00', '2021-05-31 10:36:11'),
+(9, 1, '1900.00', '2021-05-31 13:44:00'),
+(10, 2, '1800.00', '2021-05-31 13:44:44');
 
 -- --------------------------------------------------------
 
@@ -495,7 +551,7 @@ ALTER TABLE `printtypes`
 --
 ALTER TABLE `productcosts`
   ADD PRIMARY KEY (`ProductCostID`),
-  ADD KEY `FK_productcosts_ProductID` (`ProductID`);
+  ADD UNIQUE KEY `UK_productcosts` (`ProductID`,`PriceDate`);
 
 --
 -- Indexes for table `products`
@@ -550,6 +606,12 @@ ALTER TABLE `orderdetails`
 --
 ALTER TABLE `orders`
   MODIFY `OrderID` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
+-- AUTO_INCREMENT for table `productcosts`
+--
+ALTER TABLE `productcosts`
+  MODIFY `ProductCostID` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `products`

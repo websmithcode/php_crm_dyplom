@@ -38,7 +38,9 @@ class Controller
             Route::errorPage();
             return;
         }
-        $this->view->render($this->template, $this->pageData, $this->sessUser);
+        if (file_exists($this->template)) {
+            $this->view->render($this->template, $this->pageData, $this->sessUser);
+        }
     }
 
 }

@@ -14,50 +14,50 @@ Functions::includeComponent('DateTimePicker');
         <div class="d-flex flex-row mb-3">
         </div>
         <?php if (!empty($pageData['order_rows'])): ?>
-            <div class="card w-max-content">
-                <form method="get">
+            <div class="card w-max-content min-w-100">
+                <form method="post" action="<?= Functions::getCurrentPath(-1) ?>/updateOrder?<?=parse_url($_SERVER['REQUEST_URI'])['query'];?>">
                     <table class="table table-hover m-0">
                         <thead>
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Материал</th>
-                            <th scope="col">Тип принта</th>
-                            <th scope="col">Размер</th>
-                            <th scope="col">Цена</th>
-                            <th scope="col">Скидка %</th>
-                            <th scope="col">Кол-во</th>
-                            <th scope="col">Сумма</th>
+                            <th scope="col" class="w-max-content">ID</th>
+                            <th scope="col">Продукт</th>
+                            <th scope="col" style="width: 200px">Тип</th>
+                            <th scope="col" style="width: 200px">Размер</th>
+                            <th scope="col" style="width: 130px">Цена</th>
+                            <th scope="col" style="width: 200px">Скидка %</th>
+                            <th scope="col" style="width: 90px">Кол-во</th>
+                            <th scope="col" style="width: 130px">Сумма</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
                         foreach ($pageData['order_rows'] as $order_row):
                             ?>
-                            <tr>
+                            <tr data-order-detail-id="<?=$order_row['OrderDetailID']?>">
                                 <th scope="row" class="id"><?= $order_row['OrderDetailID'] ?></th>
                                 <td>
-                                    <?php $key = 'MaterialID' ?>
+                                    <?php $key = 'ProductCostID' ?>
                                     <label>
                                         <select class="form-select" name="<?= $key ?>">
-                                            <?php foreach ($pageData['materials'] as $material): ?>
-                                                <option value="<?= $material['MaterialID'] ?>"
-                                                    <?= ($material['MaterialID'] == $order_row[$key] ? 'selected' : '') ?>
-                                                >
-                                                    <?= $material['MaterialName'] ?>
+                                            <?php foreach ($pageData['productCostVariants'] as $productCost): ?>
+                                                <option value="<?= $productCost['ProductCostID'] ?>"
+                                                    <?= ($productCost['ProductCostID'] == $order_row[$key] ? 'selected' : '') ?>
+                                                        data-price="<?=$productCost['Price']?>"
+                                                ><?=$productCost['verboseName'] ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </label>
                                 </td>
                                 <td>
-                                    <?php $key = 'PrintTypeID' ?>
+                                    <?php $key = 'PrintID' ?>
                                     <label>
                                         <select class="form-select" name="<?= $key ?>">
-                                            <?php foreach ($pageData['printTypes'] as $printType): ?>
-                                                <option value="<?= $printType['PrintTypeID'] ?>"
-                                                    <?= ($printType['PrintTypeID'] == $order_row[$key] ? 'selected' : '') ?>
+                                            <?php foreach ($pageData['prints'] as $prints): ?>
+                                                <option value="<?= $prints['PrintID'] ?>"
+                                                    <?= ($prints['PrintID'] == $order_row[$key] ? 'selected' : '') ?>
                                                 >
-                                                    <?= $printType['PrintTypeName'] ?>
+                                                    <?= $prints['PrintName'] ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
@@ -65,7 +65,7 @@ Functions::includeComponent('DateTimePicker');
                                 </td>
                                 <td>
                                     <?php $key = 'SizeID' ?>
-                                    <label>
+                                    <label class="w-100">
                                         <select class="form-select" name="<?= $key ?>">
                                             <?php foreach ($pageData['sizes'] as $size): ?>
                                                 <option value="<?= $size['SizeID'] ?>"
@@ -80,13 +80,13 @@ Functions::includeComponent('DateTimePicker');
                                 <td>
                                     <?php $key = 'Price' ?>
                                     <label>
-                                        <input class="form-control" type="number" value="<?= $order_row[$key] ?>"
-                                               name="<?= $key ?>">
+                                        <input class="form-control" type="text" value="<?= $order_row[$key] ?>"
+                                               name="<?= $key ?>" disabled>
                                     </label>
                                 </td>
                                 <td>
                                     <?php $key = 'DiscountID' ?>
-                                    <label>
+                                    <label class="w-100">
                                         <select class="form-select" name="<?= $key ?>">
                                             <?php foreach ($pageData['discounts'] as $discount): ?>
                                                 <option value="<?= $discount['DiscountID'] ?>"
@@ -121,8 +121,8 @@ Functions::includeComponent('DateTimePicker');
                         ?>
                         </tbody>
                     </table>
-                        <a class="btn btn-primary m-3 w-max-content"><i class="bi bi-plus-lg"></i></a>
-                        <button class="btn btn-primary m-3">Сохранить</button>
+                    <a class="btn btn-primary m-3 w-max-content"><i class="bi bi-plus-lg"></i></a>
+                    <button class="btn btn-primary m-3" type="submit">Сохранить</button>
                 </form>
             </div>
         <?php else: ?>

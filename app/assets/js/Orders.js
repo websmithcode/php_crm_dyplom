@@ -19,26 +19,63 @@ function orders() {
 }
 
 function editOrder() {
-    const rows = document.querySelectorAll('tbody tr');
+    const form = document.querySelector('form');
+    const rows = form.querySelectorAll('tbody tr');
+    form.addEventListener('submit', submit);
 
     rows.forEach((row)=>{
         row.addEventListener('change', calculateSum);
     })
-    document.querySelector('.add_row').addEventListener('click', addRow())
+    // document.querySelector('.add_row').addEventListener('click', addRow())
 
 
     function calculateSum(e) {
-        if (['Price', 'DiscountID', 'Quantity'].includes(e.target.name)) {
+        if (['ProductCostID', 'DiscountID', 'Quantity'].includes(e.target.name)) {
+            const row = e.target.closest('tr');
+            const productCostElement = row.querySelector('[name=ProductCostID]');
+            const discountElement = row.querySelector('[name=DiscountID]');
+            const priceElement = row.querySelector('[name=Price]');
+
             function getDiscount(discountElement){
                 let discounts = Array.from(discountElement).filter(e=>e.value===discountElement.value);
                 return discounts[0].dataset.discountValue;
             }
-            const row = e.target.closest('tr');
-            const price = row.querySelector('[name=Price]').value;
+            function updatePrice(){
+                let productCosts = Array.from(productCostElement).filter(e=>e.value===productCostElement.value);
+                priceElement.value = productCosts[0].dataset.price;
+            }
+            updatePrice();
+            const price = priceElement.value;
             const quantity = row.querySelector('[name=Quantity]').value;
-            const discount = getDiscount(row.querySelector('[name=DiscountID]'));
+            const discount = getDiscount(discountElement);
             row.querySelector('[name=Summa]').value = price * quantity * discount;
-            console.table({price: price, quantity: quantity, discount: discount, summa: price * quantity * discount})
         }
+    }
+    function submit(e) {
+        e.preventDefault();
+        const rows = e.target.querySelectorAll('tr');
+        const data = Array();
+        Array.from(rows).slice(1).forEach((row)=>{
+            const rowData = {
+                OrderDetailID: row.dataset.orderDetailId,
+                ProductCostID: row.querySelector('[name=ProductCostID]').value,
+                PrintID: row.querySelector('[name=PrintID]').value,
+                SizeID: row.querySelector('[name=SizeID]').value,
+                DiscountID: row.querySelector('[name=DiscountID]').value,
+                Quantity: row.querySelector('[name=Quantity]').value,
+            }
+            data.push(rowData);
+        })
+        fetch(form.action, {
+            method: form.method,
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify(data),
+        }).then((response) => {
+            console.log(response)
+            if (response.ok) {
+            }
+        });
     }
 }

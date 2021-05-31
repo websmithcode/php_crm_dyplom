@@ -76,28 +76,38 @@ class Model extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getOrderDetails($OrderID)
+    public function getOrderDetailsValues($OrderID)
     {
-
-        $sql = "SELECT 
-                    od.OrderDetailID, 
-                    p.MaterialID, 
-                    p.PrintTypeID, 
-                    od.SizeID,
-                    od.Price,
-                    od.DiscountID, 
-                    od.Quantity, 
-                    od.Summa 
-                FROM `orderdetails` as od 
-                JOIN productcosts as pc on pc.ProductCostID = od.ProductCostID 
-                JOIN products as p on p.ProductID = pc.ProductID 
-                WHERE od.OrderID = :OrderID";
+        $sql = "SELECT * FROM orderdetails WHERE OrderID = :OrderID";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue('OrderID', $OrderID);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
+    public function getProductCostVariants(): array
+    {
+        $sql = "SELECT 
+                    CONCAT(pcs.ProductCostID, ') Материал: ', m.MaterialName, ', Тип: ', pt.PrintTypeName, ', ', pcs.Price) as verboseName, 
+                    pcs.ProductCostID, 
+                    m.MaterialName, 
+                    pt.PrintTypeName,
+                    pcs.Price
+                FROM productcosts as pcs
+                join 
+                    (
+                      SELECT 
+                      pc.ProductID, max(PriceDate) as LastPriceDate
+                      FROM productcosts as pc
+                      GROUP BY ProductID
+                    ) as pc on pc.ProductID = pcs.ProductID and pc.LastPriceDate = pcs.PriceDate
+                JOIN products as p on p.ProductID = pcs.ProductID
+                JOIN materials as m on m.MaterialID = p.MaterialID
+                JOIN printtypes as pt on pt.PrintTypeID = p.PrintTypeID";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
@@ -110,18 +120,10 @@ class Model extends \Core\Model
     }
 
 
-    public function getPrintTypes(): array
-    {
-        $sql = 'SELECT * from printtypes';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
 
-
-    public function getMaterials(): array
+    public function getPrints(): array
     {
-        $sql = 'SELECT * from materials';
+        $sql = 'SELECT * from prints';
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -136,4 +138,19 @@ class Model extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function updateOrderDetails($obj): bool
+    {
+        $sql = "UPDATE orderdetails as od
+                SET 
+                    ProductCostID = :ProductCostID,
+                    PrintID = :PrintID,
+                    SizeID = :SizeID,
+                    DiscountID = :DiscountID,
+                    Quantity = :Quantity
+                WHERE  od.OrderDetailID = :OrderDetailID";
+
+        $sth = $this->db->prepare($sql);
+        print_r((array)$obj);
+        return $sth->execute((array)$obj);
+    }
 }

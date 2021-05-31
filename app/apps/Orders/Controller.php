@@ -62,11 +62,23 @@ class Controller extends \Core\Controller
             header('Location: /orders');
         }
         $this->pageData['title'] = "Изменение заказа";
-        $this->pageData['order_rows'] = $this->model->getOrderDetails($_GET['orderID']);
+        $this->pageData['order_rows'] = $this->model->getOrderDetailsValues($_GET['orderID']);
+        $this->pageData['productCostVariants'] = $this->model->getProductCostVariants();
+        $this->pageData['prints'] = $this->model->getPrints();
         $this->pageData['sizes'] = $this->model->getsizes();
-        $this->pageData['printTypes'] = $this->model->getPrintTypes();
-        $this->pageData['materials'] = $this->model->getMaterials();
         $this->pageData['discounts'] = $this->model->getDiscounts();
+
+    }
+    public function UpdateOrder(){
+        global $STATE;
+        if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+            $STATE->httpCode = 404;
+        }
+        $toUpdate = json_decode(file_get_contents('php://input'));
+        foreach ($toUpdate as $row){
+            echo $this->model->updateOrderDetails($row);
+        }
+
 
     }
 }

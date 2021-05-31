@@ -1,11 +1,16 @@
 .filter-invert {
     filter: invert();
 }
-
+.min-w-100{
+    min-width: 100%;
+}
 .w-max-content {
     width: max-content;
 }
 
+.min-h-100{
+    height: 100%;
+}
 .h-max-content {
     height: max-content;
 }

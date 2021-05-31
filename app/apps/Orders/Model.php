@@ -6,7 +6,7 @@ class Model extends \Core\Model
 {
     public function getOrders($sessUser, $filters = null)
     {
-        $_isManager = $sessUser->LoginRoleID== USER_ROLES['MANAGER'];
+        $_isManager = $sessUser->LoginRoleID == USER_ROLES['MANAGER'];
         $sql = "SELECT 
                         o.OrderID as 'Номер заказа', 
                         DATE_FORMAT(o.OrderDate, '%d.%m.%Y в %H:%i:%s') as 'Дата заказа',
@@ -76,5 +76,64 @@ class Model extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getOrderDetails($OrderID)
+    {
+
+        $sql = "SELECT 
+                    od.OrderDetailID, 
+                    p.MaterialID, 
+                    p.PrintTypeID, 
+                    od.SizeID,
+                    od.Price,
+                    od.DiscountID, 
+                    od.Quantity, 
+                    od.Summa 
+                FROM `orderdetails` as od 
+                JOIN productcosts as pc on pc.ProductCostID = od.ProductCostID 
+                JOIN products as p on p.ProductID = pc.ProductID 
+                WHERE od.OrderID = :OrderID";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue('OrderID', $OrderID);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    public function getSizes(): array
+    {
+        $sql = 'SELECT * from sizes';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getPrintTypes(): array
+    {
+        $sql = 'SELECT * from printtypes';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getMaterials(): array
+    {
+        $sql = 'SELECT * from materials';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getDiscounts(): array
+    {
+        $sql = 'SELECT * from discounts';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }

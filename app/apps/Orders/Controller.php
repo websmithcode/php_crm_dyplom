@@ -52,4 +52,22 @@ class Controller extends \Core\Controller
         }
         $this->pageData['title'] = "Добавление заказа";
     }
+
+    public function EditOrder()
+    {
+        if (empty($_SESSION['user'])) {
+            header('Location: /user/login');
+        }
+        if (empty($_GET['orderID'])){
+            header('Location: /orders');
+        }
+        $this->pageData['title'] = "Изменение заказа";
+        $this->pageData['order_rows'] = $this->model->getOrderDetails($_GET['orderID']);
+        $this->pageData['sizes'] = $this->model->getsizes();
+        $this->pageData['printTypes'] = $this->model->getPrintTypes();
+        $this->pageData['materials'] = $this->model->getMaterials();
+        $this->pageData['discounts'] = $this->model->getDiscounts();
+
+    }
 }
+

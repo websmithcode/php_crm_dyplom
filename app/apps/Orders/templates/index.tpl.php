@@ -33,7 +33,7 @@ Functions::includeComponent('DateTimePicker');
                             </div>
                         </div>
                         <hr>
-                        <?php if ($sessUser->LoginRoleID== USER_ROLES['MANAGER']): ?>
+                        <?php if ($sessUser->LoginRoleID == USER_ROLES['MANAGER']): ?>
                             <div class="row">
                                 <div class="input-group">
 
@@ -78,20 +78,23 @@ Functions::includeComponent('DateTimePicker');
                         <?php
                         endforeach;
                         ?>
+                        <th scope="col">Изменить</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php
                     foreach ($pageData['orders'] as $order):
+                        $ID = array_shift($order);
                         ?>
                         <tr>
-                            <th scope="row"><?= array_shift($order) ?></th>
-                            <?php foreach ($order as $key => $col):
-                                ?>
+                            <th scope="row"><?= $ID ?></th>
+                            <?php foreach ($order as $key => $col): ?>
                                 <td><?= $col ?></td>
                             <?php
                             endforeach;
                             ?>
+                            <td class="text-center"><a href="/orders/editorder?orderID=<?= $ID ?>" class="btn btn-outline-warning"><i
+                                            class="bi bi-pencil"></i></a></td>
                         </tr>
                     <?php
                     endforeach;
@@ -103,3 +106,4 @@ Functions::includeComponent('DateTimePicker');
             <?php endif; ?>
         </div>
     </div>
+</div>

@@ -76,7 +76,7 @@ function editOrder() {
             data.push(rowData);
         })
         fetch(editForm.action, {
-            method: editForm.method,
+            method: 'PUT',
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
             },

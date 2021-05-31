@@ -1,6 +1,7 @@
 <?php namespace apps\Orders;
 
 use DateTime;
+use PDOException;
 
 class Controller extends \Core\Controller
 {
@@ -70,36 +71,34 @@ class Controller extends \Core\Controller
         $this->pageData['discounts'] = $this->model->getDiscounts();
 
     }
-    public function UpdateOrder(){
-        if (empty($_SESSION['user'])) {
-            header('Location: /user/login');
-        }
-        global $STATE;
-        if ($_SERVER['REQUEST_METHOD'] == 'GET'){
-            $STATE->httpCode = 404;
-            return;
-        }
-        $toUpdate = json_decode(file_get_contents('php://input'));
-        foreach ($toUpdate as $row){
-            $this->model->updateOrderDetails($row);
-        }
-    }
     public function orderDetail(){
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
         global $STATE;
-        switch ($_SERVER['REQUEST_METHOD']){
-            case 'POST':
-                $this->model->addOrderDetail($_POST);
-                header('Location: ' . $_SERVER['HTTP_REFERER']);
-                break;
-            case 'DELETE':
-                $this->model->deleteOrderDetail($_GET['OrderDetailID']);
-                break;
-            default:
-                $STATE->httpCode = 404;
+        try{
+            switch ($_SERVER['REQUEST_METHOD']){
+                case 'POST':
+                    $this->model->addOrderDetail($_POST);
+                    header('Location: ' . $_SERVER['HTTP_REFERER']);
+                    break;
+                case 'DELETE':
+                    $this->model->deleteOrderDetail($_GET['OrderDetailID']);
+                    break;
+                case 'PUT':
+                    $toUpdate = json_decode(file_get_contents('php://input'));
+                    foreach ($toUpdate as $row){
+                        $this->model->updateOrderDetails($row);
+                    }
+                    break;
+                default:
+                    $STATE->httpCode = 404;
+            }}
+        catch ( PDOException ){
+            $STATE->httpCode = 400;
         }
+
+
 
     }
 

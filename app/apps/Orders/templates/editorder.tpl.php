@@ -15,7 +15,7 @@ Functions::includeComponent('DateTimePicker');
         </div>
         <?php if (!empty($pageData['order_rows'])): ?>
             <div class="card w-max-content min-w-100">
-                <form method="post" action="<?= Functions::getCurrentPath(-1) ?>/updateOrder?<?=parse_url($_SERVER['REQUEST_URI'])['query'];?>">
+                <form action="/orders/orderdetail">
                     <table class="table table-hover m-0">
                         <thead>
                         <tr>

@@ -73,8 +73,8 @@ function editOrder() {
             },
             body: JSON.stringify(data),
         }).then((response) => {
-            console.log(response)
             if (response.ok) {
+                showAlert('Сохранено', 'bg-success');
             }
         });
     }

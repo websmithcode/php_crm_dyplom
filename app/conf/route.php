@@ -60,6 +60,9 @@ class Route
     public static function errorPage($httpCode = null, $error = null)
     {
         global $STATE;
-        printf("<h1>%s error</h1><h2>%s</h2>", $httpCode ?? $STATE->httpCode, $error ?? $STATE->error);
+        $httpCode = $httpCode ?? $STATE->httpCode;
+        $error = $error ?? $STATE->error;
+        http_response_code((int)$httpCode);
+        printf("<h1>%s error</h1><h2>%s</h2>", $httpCode, $error);
     }
 }

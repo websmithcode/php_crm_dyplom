@@ -19,14 +19,23 @@ function orders() {
 }
 
 function editOrder() {
-    const form = document.querySelector('form');
-    const rows = form.querySelectorAll('tbody tr');
-    form.addEventListener('submit', submit);
+    const modal = document.getElementById('addOrderDetail');
+    const modalSubmitButton = modal.querySelector('button[type=submit]')
+    const addForm = modal.querySelector('form');
+    modalSubmitButton.addEventListener('click', ()=>{addForm.submit()});
+
+    const editForm = document.querySelector('form');
+    const rows = editForm.querySelectorAll('tbody tr');
+    editForm.addEventListener('submit', editSubmit);
+
+    const deleteButtons = document.querySelectorAll('button.delete-order-detail');
+    Array.from(deleteButtons).forEach(btn=>{
+        btn.addEventListener( 'click', deleteOrderDetail);
+    });
 
     rows.forEach((row)=>{
         row.addEventListener('change', calculateSum);
     })
-    // document.querySelector('.add_row').addEventListener('click', addRow())
 
 
     function calculateSum(e) {
@@ -51,7 +60,7 @@ function editOrder() {
             row.querySelector('[name=Summa]').value = price * quantity * discount;
         }
     }
-    function submit(e) {
+    function editSubmit(e) {
         e.preventDefault();
         const rows = e.target.querySelectorAll('tr');
         const data = Array();
@@ -66,8 +75,8 @@ function editOrder() {
             }
             data.push(rowData);
         })
-        fetch(form.action, {
-            method: form.method,
+        fetch(editForm.action, {
+            method: editForm.method,
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
             },
@@ -76,6 +85,23 @@ function editOrder() {
             if (response.ok) {
                 showAlert('Сохранено', 'bg-success');
             }
+        });
+    }
+
+    function deleteOrderDetail(e) {
+        e.preventDefault();
+
+        const row = e.target.closest('tr');
+        const OrderDetailID = row.dataset.orderDetailId;
+        const formData = new FormData();
+        formData.append('OrderDetailID', OrderDetailID);
+        fetch('/orders/orderdetail?OrderDetailID=' + OrderDetailID, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+        }).then(() => {
+            window.location.reload();
         });
     }
 }

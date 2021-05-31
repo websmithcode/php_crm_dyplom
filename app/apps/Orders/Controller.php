@@ -58,11 +58,12 @@ class Controller extends \Core\Controller
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
-        if (empty($_GET['orderID'])){
+        $ID = 'OrderID';
+        if (empty($_GET[$ID])){
             header('Location: /orders');
         }
         $this->pageData['title'] = "Изменение заказа";
-        $this->pageData['order_rows'] = $this->model->getOrderDetailsValues($_GET['orderID']);
+        $this->pageData['order_rows'] = $this->model->getOrderDetailsValues($_GET[$ID]);
         $this->pageData['productCostVariants'] = $this->model->getProductCostVariants();
         $this->pageData['prints'] = $this->model->getPrints();
         $this->pageData['sizes'] = $this->model->getsizes();
@@ -70,16 +71,37 @@ class Controller extends \Core\Controller
 
     }
     public function UpdateOrder(){
+        if (empty($_SESSION['user'])) {
+            header('Location: /user/login');
+        }
         global $STATE;
         if ($_SERVER['REQUEST_METHOD'] == 'GET'){
             $STATE->httpCode = 404;
+            return;
         }
         $toUpdate = json_decode(file_get_contents('php://input'));
         foreach ($toUpdate as $row){
-            echo $this->model->updateOrderDetails($row);
+            $this->model->updateOrderDetails($row);
+        }
+    }
+    public function orderDetail(){
+        if (empty($_SESSION['user'])) {
+            header('Location: /user/login');
+        }
+        global $STATE;
+        switch ($_SERVER['REQUEST_METHOD']){
+            case 'POST':
+                $this->model->addOrderDetail($_POST);
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                break;
+            case 'DELETE':
+                $this->model->deleteOrderDetail($_GET['OrderDetailID']);
+                break;
+            default:
+                $STATE->httpCode = 404;
         }
 
-
     }
+
 }
 

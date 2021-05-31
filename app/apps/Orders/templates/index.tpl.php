@@ -93,7 +93,7 @@ Functions::includeComponent('DateTimePicker');
                             <?php
                             endforeach;
                             ?>
-                            <td class="text-center"><a href="/orders/editorder?orderID=<?= $ID ?>" class="btn btn-outline-warning"><i
+                            <td class="text-center"><a href="/orders/editorder?OrderID=<?= $ID ?>" class="btn btn-outline-warning"><i
                                             class="bi bi-pencil"></i></a></td>
                         </tr>
                     <?php

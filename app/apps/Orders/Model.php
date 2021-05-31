@@ -150,7 +150,22 @@ class Model extends \Core\Model
                 WHERE  od.OrderDetailID = :OrderDetailID";
 
         $sth = $this->db->prepare($sql);
-        print_r((array)$obj);
         return $sth->execute((array)$obj);
+    }
+
+    public function addOrderDetail($values): bool
+    {
+        $sql = "INSERT INTO orderdetails (OrderID, ProductCostID, PrintID, SizeID, DiscountID, Quantity) 
+                VALUES (:OrderID, :ProductCostID, :PrintID, :SizeID, :DiscountID, :Quantity)";
+        $sth = $this->db->prepare($sql);
+        return $sth->execute($values);
+    }
+
+    public function deleteOrderDetail($ID): bool
+    {
+        $sql = "DELETE FROM orderdetails as od WHERE od.OrderDetailID=:OrderDetailID";
+        $sth = $this->db->prepare($sql);
+        $sth->bindValue(':OrderDetailID', $ID);
+        return $sth->execute();
     }
 }

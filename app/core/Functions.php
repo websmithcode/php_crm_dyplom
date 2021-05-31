@@ -15,9 +15,11 @@ class Functions
         return ucfirst(!empty($appName) ? $appName : 'Index');
     }
 
-    public static function getCurrentPath()
+    public static function getCurrentPath($offset=0): string
     {
-        return parse_url($_SERVER['REQUEST_URI'])['path'];
+        $pathParts = explode('/', parse_url($_SERVER['REQUEST_URI'])['path']);
+        $pathParts = array_slice($pathParts, 0, count($pathParts) + $offset);
+        return join('/', $pathParts);
     }
 
     public static function getActionName(): string

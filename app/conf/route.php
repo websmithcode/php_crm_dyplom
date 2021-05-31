@@ -42,6 +42,7 @@ class Route
     {
         if (str_contains(Functions::getCurrentPath(), '//')) {
             $reduced = Functions::getCurrentPath();
+            echo $reduced;
             while (str_contains($reduced, '//')) {
                 $reduced = preg_replace("/\/{2}/", '/', $reduced);
             }

@@ -17,9 +17,10 @@ class Functions
 
     public static function getCurrentPath($offset=0): string
     {
-        $pathParts = explode('/', parse_url($_SERVER['REQUEST_URI'])['path']);
+        $path = trim(parse_url($_SERVER['REQUEST_URI'])['path'], '/');
+        $pathParts = explode('/', $path);
         $pathParts = array_slice($pathParts, 0, count($pathParts) + $offset);
-        return join('/', $pathParts);
+        return '/' . join('/', $pathParts);
     }
 
     public static function getActionName(): string

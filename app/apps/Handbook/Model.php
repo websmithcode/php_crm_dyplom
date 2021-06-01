@@ -42,4 +42,36 @@ class Model extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function addPrint($values): bool
+    {
+        $sql = "INSERT INTO prints (PrintName) 
+                VALUES (:PrintName)";
+        $sth = $this->db->prepare($sql);
+        return $sth->execute($values);
+    }
+
+    public function addSize($values): bool
+    {
+        $sql = "INSERT INTO sizes (SizeCodeSym, SizeCodeNum) 
+                VALUES (:SizeCodeSym, :SizeCodeNum)";
+        $sth = $this->db->prepare($sql);
+        return $sth->execute($values);
+    }
+
+    public function addMaterial($values): bool
+    {
+        $sql = "INSERT INTO materials (MaterialName) 
+                VALUES (:MaterialName)";
+        $sth = $this->db->prepare($sql);
+        return $sth->execute($values);
+    }
+
+
+    public function addPartner($values): bool
+    {
+        $sql = "INSERT INTO partners (PartnerName, Commission, PartnerEmail, PartnerRequisites) 
+                VALUES (:PartnerName, :Commission, :PartnerEmail, :PartnerRequisites)";
+        $sth = $this->db->prepare($sql);
+        return $sth->execute($values);
+    }
 }

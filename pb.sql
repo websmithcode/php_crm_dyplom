@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: May 31, 2021 at 04:25 PM
+-- Generation Time: Jun 01, 2021 at 08:59 AM
 -- Server version: 8.0.25
 -- PHP Version: 7.4.16
 
@@ -92,7 +92,7 @@ CREATE TABLE `logins` (
 
 INSERT INTO `logins` (`LoginID`, `LoginName`, `LoginPassword`, `LoginRoleID`, `PartnerID`) VALUES
 (1, 'Ars', '202cb962ac59075b964b07152d234b70', 2, 1),
-(2, 'Ars2', '202cb962ac59075b964b07152d234b70', 1, 2);
+(2, 'Ars2', '202cb962ac59075b964b07152d234b70', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -138,11 +138,11 @@ CREATE TABLE `orderdetails` (
 --
 
 INSERT INTO `orderdetails` (`OrderID`, `OrderDetailID`, `ProductCostID`, `PrintID`, `SizeID`, `DiscountID`, `Price`, `DiscountValue`, `Quantity`) VALUES
-(14, 25, 5, 10, 3, 2, '2089.00', '0.3', 2),
+(14, 25, 5, 10, 3, 2, '300.00', '0.3', 2),
 (14, 29, 1, 6, 1, 1, '1690.00', '1.0', 1),
 (27, 30, 1, 1, 1, 3, '1690.00', '1.0', 2),
 (27, 31, 2, 14, 3, 2, '1889.00', '1.0', 1),
-(19, 32, 4, 9, 2, 3, '2188.00', '0.5', 2),
+(19, 32, 4, 9, 2, 3, '2188.00', '1.0', 2),
 (19, 33, 1, 6, 7, 1, '1690.00', '1.0', 2),
 (31, 34, 1, 9, 5, 2, '1690.00', '1.0', 1),
 (32, 35, 1, 8, 5, 2, '1690.00', '1.0', 1),
@@ -233,9 +233,9 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`OrderID`, `OrderDate`, `ClientID`, `PartnerID`, `StateID`, `OrderCost`) VALUES
-(14, '2019-12-28 00:00:00', 1, 1, 3, '2943.40'),
+(14, '2019-12-28 00:00:00', 1, 1, 3, '1870.00'),
 (18, '2019-12-04 00:00:00', 2, 1, 1, '4444.70'),
-(19, '2019-11-07 00:00:00', 4, 2, 1, '1192.00'),
+(19, '2019-11-07 00:00:00', 4, 2, 1, '3380.00'),
 (24, '2019-12-30 00:00:00', 8, 4, 1, '507.00'),
 (26, '2020-01-08 00:00:00', 10, 1, 3, '507.00'),
 (27, '2020-01-01 00:00:00', 9, 3, 4, '2089.00'),
@@ -593,7 +593,7 @@ ALTER TABLE `logins`
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `MaterialID` smallint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `MaterialID` smallint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `orderdetails`
@@ -608,6 +608,18 @@ ALTER TABLE `orders`
   MODIFY `OrderID` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
+-- AUTO_INCREMENT for table `partners`
+--
+ALTER TABLE `partners`
+  MODIFY `PartnerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `prints`
+--
+ALTER TABLE `prints`
+  MODIFY `PrintID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
 -- AUTO_INCREMENT for table `productcosts`
 --
 ALTER TABLE `productcosts`
@@ -618,6 +630,12 @@ ALTER TABLE `productcosts`
 --
 ALTER TABLE `products`
   MODIFY `ProductID` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `sizes`
+--
+ALTER TABLE `sizes`
+  MODIFY `SizeID` tinyint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables

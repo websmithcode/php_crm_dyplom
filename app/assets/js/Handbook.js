@@ -21,7 +21,6 @@ function addRowHandler() {
     const modalSubmitButton = modal.querySelector('button[type=submit]')
     const addForm = modal.querySelector('form');
     modalSubmitButton.addEventListener('click', submit);
-    console.log(modal)
     function submit(e){
         e.preventDefault();
         const data = {}
@@ -37,7 +36,7 @@ function addRowHandler() {
         }).then((response) => {
             if (response.ok) {
                 showAlert('Сохранено', 'bg-success');
-                // window.location.reload()
+                window.location.reload()
             }
         });
 

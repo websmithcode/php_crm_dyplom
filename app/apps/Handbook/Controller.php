@@ -107,7 +107,6 @@ class Controller extends \Core\Controller
                 case 'POST':
                     $toUpdate = (array)json_decode(file_get_contents('php://input'));
                     $this->model->addPartner($toUpdate);
-
                     break;
                 default:
                     $STATE->httpCode = 404;

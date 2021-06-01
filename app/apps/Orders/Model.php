@@ -199,6 +199,12 @@ class Model extends \Core\Model
     }
     public function addOrder($values): int
     {
+        $sessUser = (array)$this->getSessUser();
+        $_isManager = $sessUser['LoginRoleID'] == USER_ROLES['MANAGER'];
+        if (!$_isManager) {
+            $values['PartnerID'] = $sessUser['PartnerID'];
+        }
+
         $sql = "INSERT INTO orders (OrderDate, ClientID, PartnerID, StateID) 
                 VALUES (:OrderDate, :ClientID, :PartnerID, :StateID)";
         $sth = $this->db->prepare($sql);

@@ -115,7 +115,7 @@ Functions::includeComponent('DateTimePicker');
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/orders/order">
+                <form action="/orders/order" method="POST">
                     <div class="mb-3 d-flex flex-column">
                         <label class="form-label">Дата заказа</label>
                         <?php new DateTimePicker('date', 'time', 'form-control w-max-content', true ,date("Y-m-d"), date("H:i:s") ) ?>
@@ -133,6 +133,7 @@ Functions::includeComponent('DateTimePicker');
                             </select>
                         </label>
                     </div>
+                    <?php if ($sessUser->LoginRoleID == USER_ROLES['MANAGER']):?>
                     <div class="mb-3 d-flex flex-column">
                         <label class="form-label">Партнер</label>
                         <?php $key = 'PartnerID' ?>
@@ -146,6 +147,7 @@ Functions::includeComponent('DateTimePicker');
                             </select>
                         </label>
                     </div>
+                    <?php endif; ?>
                     <div class="mb-3 d-flex flex-column">
                         <label class="form-label">Клиент</label>
                         <?php $key = 'ClientID' ?>

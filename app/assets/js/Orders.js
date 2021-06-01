@@ -14,11 +14,12 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 function orders() {
-    new bootstrap.Tooltip(document.querySelector('.partner-filter-info'), {
+    try{new bootstrap.Tooltip(document.querySelector('.partner-filter-info'), {
         container: 'body',
         html: true,
         title: `<code>"ID&nbsp;партнера") "Имя&nbsp;партнера" ("почта") ["реквизиты"]</code>`
-    });
+    });} catch{}
+
     const modal = document.getElementById('addOrder');
     const modalSubmitButton = modal.querySelector('button[type=submit]')
     const addForm = modal.querySelector('form');

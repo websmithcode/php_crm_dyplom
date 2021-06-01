@@ -44,16 +44,59 @@ class Controller extends \Core\Controller
 
         $this->pageData['orders'] = $this->model->getOrders($this->sessUser, $filters);
         $this->pageData['partners'] = $this->model->getPartners();
+        $this->pageData['states'] = $this->model->getStates();
+        $this->pageData['clients'] = $this->model->getClients();
+    }
+    public function Order(){
+        if (empty($_SESSION['user'])) {
+            header('Location: /user/login');
+        }
+        global $STATE;
+        try{
+            switch ($_SERVER['REQUEST_METHOD']){
+                case 'POST':
+                    $date = $_POST['date'];
+                    unset($_POST['date']);
+                    $time = $_POST['time'];
+                    unset($_POST['time']);
+                    $_POST['OrderDate'] = $date . ' ' . $time;
+                    $id = $this->model->addOrder($_POST);
+                    header('Location: ' . '/orders/editorderdetails?OrderID='.$id);
+                    break;
+                case 'PUT':
+                    $toUpdate = (array) json_decode(file_get_contents('php://input'));
+                    $date = $toUpdate['date'];
+                    unset($toUpdate['date']);
+                    $time = $toUpdate['time'];
+                    unset($toUpdate['time']);
+                    $toUpdate['OrderDate'] = $date . ' ' . $time;
+                    print_r($toUpdate);
+                    $this->model->updateOrder($toUpdate);
+                    break;
+                default:
+                    $STATE->httpCode = 404;
+            }}
+        catch ( PDOException ){
+            $STATE->httpCode = 400;
+        }
     }
 
-    public function AddOrder()
+    public function EditOrderDetails()
     {
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
-        $this->pageData['title'] = "Добавление заказа";
+        $ID = 'OrderID';
+        if (empty($_GET[$ID])){
+            header('Location: /orders');
+        }
+        $this->pageData['title'] = "Изменение деталей заказа №" . $_GET['OrderID'];
+        $this->pageData['order_rows'] = $this->model->getOrderDetailsValues($_GET[$ID]);
+        $this->pageData['productCostVariants'] = $this->model->getProductCostVariants();
+        $this->pageData['prints'] = $this->model->getPrints();
+        $this->pageData['sizes'] = $this->model->getsizes();
+        $this->pageData['discounts'] = $this->model->getDiscounts();
     }
-
     public function EditOrder()
     {
         if (empty($_SESSION['user'])) {
@@ -63,15 +106,15 @@ class Controller extends \Core\Controller
         if (empty($_GET[$ID])){
             header('Location: /orders');
         }
-        $this->pageData['title'] = "Изменение заказа";
-        $this->pageData['order_rows'] = $this->model->getOrderDetailsValues($_GET[$ID]);
-        $this->pageData['productCostVariants'] = $this->model->getProductCostVariants();
-        $this->pageData['prints'] = $this->model->getPrints();
-        $this->pageData['sizes'] = $this->model->getsizes();
-        $this->pageData['discounts'] = $this->model->getDiscounts();
-
+        $this->pageData['title'] = "Изменение заказа №" . $_GET['OrderID'];
+        $this->pageData['orderData'] = $this->model->getOrderData($_GET['OrderID']);
+        $this->pageData['partners'] = $this->model->getPartners();
+        $this->pageData['states'] = $this->model->getStates();
+        $this->pageData['clients'] = $this->model->getClients();
     }
-    public function orderDetail(){
+
+
+    public function OrderDetail(){
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }

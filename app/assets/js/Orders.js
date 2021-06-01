@@ -4,6 +4,9 @@ window.addEventListener('DOMContentLoaded', () => {
         case 'orders':
             orders();
             break
+        case 'orders/editorderdetails':
+            editOrderDetails();
+            break
         case 'orders/editorder':
             editOrder();
             break
@@ -16,9 +19,37 @@ function orders() {
         html: true,
         title: `<code>"ID&nbsp;партнера") "Имя&nbsp;партнера" ("почта") ["реквизиты"]</code>`
     });
+    const modal = document.getElementById('addOrder');
+    const modalSubmitButton = modal.querySelector('button[type=submit]')
+    const addForm = modal.querySelector('form');
+    modalSubmitButton.addEventListener('click', ()=>{addForm.submit()});
 }
 
 function editOrder() {
+    const form = document.querySelector('form');
+    const submitButton = form.querySelector('button[type=submit]')
+    submitButton.addEventListener('click', submit);
+    function submit(e){
+        e.preventDefault();
+        const data = {}
+        Array.from(form.querySelectorAll('[name]')).forEach(e=>{
+            data[e.name] = e.value;
+        })
+        fetch(form.action, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify(data),
+        }).then((response) => {
+            if (response.ok) {
+                showAlert('Сохранено', 'bg-success');
+            }
+        });
+
+    }
+}
+function editOrderDetails() {
     const modal = document.getElementById('addOrderDetail');
     const modalSubmitButton = modal.querySelector('button[type=submit]')
     const addForm = modal.querySelector('form');

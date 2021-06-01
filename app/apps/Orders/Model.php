@@ -68,6 +68,13 @@ class Model extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getClients()
+    {
+        $sql = "SELECT * FROM clients";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function getPartners()
     {
         $sql = "SELECT * FROM partners";
@@ -119,6 +126,13 @@ class Model extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getStates(): array{
+        $sql = 'SELECT * from states';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 
     public function getPrints(): array
@@ -138,6 +152,16 @@ class Model extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+    public function getOrderData($OrderID): array
+    {
+        $sql = 'SELECT * from orders as o WHERE o.OrderID = :OrderID';
+        $stmt = $this->db->prepare($sql);
+        $stmt->BindValue(':OrderID', $OrderID);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function updateOrderDetails($obj): bool
     {
         $sql = "UPDATE orderdetails as od
@@ -152,6 +176,19 @@ class Model extends \Core\Model
         $sth = $this->db->prepare($sql);
         return $sth->execute((array)$obj);
     }
+    public function updateOrder($obj): bool
+    {
+        $sql = "UPDATE orders as o
+                SET 
+                    OrderDate = :OrderDate,
+                    ClientID = :ClientID,
+                    PartnerID = :PartnerID,
+                    StateID = :StateID
+                WHERE  o.OrderID = :OrderID";
+
+        $sth = $this->db->prepare($sql);
+        return $sth->execute((array) $obj);
+    }
 
     public function addOrderDetail($values): bool
     {
@@ -159,6 +196,14 @@ class Model extends \Core\Model
                 VALUES (:OrderID, :ProductCostID, :PrintID, :SizeID, :DiscountID, :Quantity)";
         $sth = $this->db->prepare($sql);
         return $sth->execute($values);
+    }
+    public function addOrder($values): int
+    {
+        $sql = "INSERT INTO orders (OrderDate, ClientID, PartnerID, StateID) 
+                VALUES (:OrderDate, :ClientID, :PartnerID, :StateID)";
+        $sth = $this->db->prepare($sql);
+        $sth->execute($values);
+        return $this->db->lastInsertId();
     }
 
     public function deleteOrderDetail($ID): bool

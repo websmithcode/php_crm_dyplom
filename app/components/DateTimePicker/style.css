@@ -30,7 +30,7 @@
 }
 
 .datetimepicker input[type=time] {
-    width: 7rem;
+    width: 9rem;
     padding: 0.25rem 0.5rem 0.25rem 0;
     border-left-width: 0;
 }

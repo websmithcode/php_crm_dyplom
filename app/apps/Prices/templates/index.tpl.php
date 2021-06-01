@@ -8,7 +8,7 @@ Functions::includeComponent('DateTimePicker');
     <h1><?= $pageData['title'] ?></h1>
     <div>
         <div class="d-flex flex-row mb-3">
-            <a class="btn btn-primary h-max-content me-3" type="button" title="Добавить заказ" href="addprice/">
+            <a class="btn btn-primary h-max-content me-3" type="button" title="Добавить цену" data-bs-toggle="modal" data-bs-target="#addPrice">
                 <i class="bi bi-plus-square"></i>
             </a>
             <button class="btn btn-primary h-max-content me-3" type="button" data-bs-toggle="collapse"
@@ -76,5 +76,40 @@ Functions::includeComponent('DateTimePicker');
             <?php else: ?>
                 <p class="m-3">Ничего не найдено</p>
             <?php endif; ?>
+        </div>
+    </div>
+    <div class="modal fade" id="addPrice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Добавить заказ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/prices/price" method="POST">
+                        <div class="mb-3 d-flex flex-column">
+                            <label class="form-label">Продукт</label>
+                            <?php $key = 'ProductID' ?>
+                            <label>
+                                <select class="form-select" name="<?= $key ?>">
+                                    <?php foreach ($pageData['products'] as $product): ?>
+                                        <option value="<?= $product[$key] ?>"
+                                        ><?=$product['PrintTypeName'] . ' ' . $product['MaterialName'] ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="mb-3 d-flex flex-column">
+                            <label class="form-label">Цена</label>
+                            <label><input type="number" class="form-control" name="Price" value="0"></label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </div>
+            </div>
         </div>
     </div>

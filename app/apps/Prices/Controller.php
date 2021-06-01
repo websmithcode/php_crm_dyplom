@@ -1,6 +1,7 @@
 <?php namespace apps\Prices;
 
 use DateTime;
+use PDOException;
 
 class Controller extends \Core\Controller
 {
@@ -41,22 +42,27 @@ class Controller extends \Core\Controller
         }
 
         $this->pageData['prices'] = $this->model->getPrices($filters);
+        $this->pageData['products'] = $this->model->getProducts();
+
     }
 
-    public function AddPrice()
-    {
+    public function Price(){
         if (empty($_SESSION['user'])) {
             header('Location: /user/login');
         }
-        $this->pageData['title'] = "Добавление цены";
-    }
+        global $STATE;
+        try{
+            switch ($_SERVER['REQUEST_METHOD']){
+                case 'POST':
+                    $toUpdate = (array) json_decode(file_get_contents('php://input'));
+                    $this->model->addPrice($toUpdate);
 
-    public function ChangePrice()
-    {
-        if (empty($_SESSION['user'])) {
-            header('Location: /user/login');
+                    break;
+                default:
+                    $STATE->httpCode = 404;
+            }}
+        catch ( PDOException ){
+            $STATE->httpCode = 400;
         }
-
-        $this->pageData['title'] = "Установка цен";
     }
 }

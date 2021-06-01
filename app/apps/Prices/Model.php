@@ -37,4 +37,45 @@ class Model extends \Core\Model
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
+    public function getMaterials(): array
+    {
+        $sql = 'SELECT * from materials';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getPrintTypes(): array
+    {
+        $sql = 'SELECT * from printtypes';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getProducts(): array
+    {
+        $sql = '
+            SELECT p.ProductID, m.MaterialName, pt.PrintTypeName
+            FROM products as p
+            JOIN materials as m on m.MaterialID = p.MaterialID
+            JOIN printtypes as pt on pt.PrintTypeID = p.PrintTypeID
+            ';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function addPrice($values): bool
+    {
+        $sql = "INSERT INTO productcosts (Price, ProductID) 
+                VALUES (:Price, :ProductID )";
+        $sth = $this->db->prepare($sql);
+        return $sth->execute($values);
+    }
 }
